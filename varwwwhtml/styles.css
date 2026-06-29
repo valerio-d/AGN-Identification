@@ -1,0 +1,550 @@
+/* Night mode */
+:root {
+    --highlight-color:#5D6D7E;
+}
+/* Day mode */
+:root.day-mode {
+    --highlight-color: lavender;
+}
+
+#toggle-mode {
+    position: absolute;
+    right: 20px;
+    top: 9px;
+    cursor: pointer;
+    font-size: 2em;
+}
+#toggle-mode:hover {
+    cursor: pointer;
+}
+#toggle-mode img {
+    width: 50px;
+    height: 50px;
+}
+
+#share-query {
+    position: absolute;
+    right: 20px;
+    top: 69px;
+    cursor: pointer;
+    font-size: 2em;
+}
+#share-query:hover {
+    cursor: pointer;
+}
+#share-query img {
+    width: 40px;
+    height: 40px;
+}
+
+
+#help {
+    position: absolute;
+    right: 25px;
+    bottom: 25px;
+    margin-right: 5px;
+    margin-bottom: 5px;
+    cursor: pointer;
+    font-size: 3em;
+}
+#help:hover {
+    cursor: pointer;
+}
+
+
+body {
+    --bg-color: #333;
+    background-color: var(--bg-color);
+    color: #fff;
+}
+body a {
+    color: #EDF02E;
+}
+
+body.day-mode {
+    --bg-color: #fff;
+    background-color: var(--bg-color);
+    color: #333;
+}
+body.day-mode a {
+    color: #0000EE;
+}
+
+
+/* Style the tooltip */
+.tooltip {
+    position: relative;
+    display: inline-block;
+}
+
+/* Style the tooltip text */
+.tooltip .tooltiptext {
+    visibility: hidden;
+    width: auto;
+    min-width: 100px;
+    background-color: #555;
+    color: #fff;
+    text-align: center;
+    border-radius: 6px;
+    padding: 5px 6px;
+    
+    /* Position the tooltip text */
+    position: absolute;
+    z-index: 1;
+    bottom: 100%;
+    left: 50%;
+    margin-left: 0px;
+
+    /* Fade in the tooltip text */
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+/* Show the tooltip text when the mouse moves over the tooltip container */
+.tooltip:hover .tooltiptext {
+    visibility: visible;
+    opacity: 1;
+}
+
+
+/* for the table header */
+thead {
+    position: sticky;
+    top: 0;
+    background-color: #34495E;
+}
+thead.day-mode {
+    background-color: #f5f5f5;
+}
+
+th {
+    white-space: nowrap;
+}
+
+[data-sort]:hover {
+    cursor: pointer;
+}
+
+[data-dir="asc"]:after {
+    content: ' ↘';
+}
+
+[data-dir="desc"]:after {
+    content: ' ↗';
+}
+
+#coordinatesbox {
+    display: none;
+    background-color: rgba(255, 255, 255);
+    color: black;
+    padding: 5px;
+    text-align: left;
+    font-family: "Courier New", monospace;
+    position: absolute;
+    left: 50%;
+    margin-left: 10px;
+    margin-top: 10px;
+    white-space: pre;
+    z-index: 10;
+}
+#scalebar {
+    display: none;
+    background-color: rgba(255, 255, 255);
+    color: black;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    text-align: center;
+    font-family: "Courier New", monospace;
+    position: absolute;
+    left: 50%;
+    height: 15px;
+    margin-left: 10px;
+    margin-top: 66px;
+    white-space: pre;
+    z-index: 10;
+    /* transform: translateY(-45px); */
+}
+#scalebarkpc {
+    display: none;
+    background-color: rgba(255, 255, 255);
+    color: black;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    text-align: center;
+    font-family: "Courier New", monospace;
+    position: absolute;
+    left: 50%;
+    height: 15px;
+    margin-left: 10px;
+    margin-top: 101px;
+    white-space: pre;
+    z-index: 10;
+    /* transform: translateY(-45px); */
+}
+
+body,html {
+    margin: 0;
+    padding: 0;
+}
+
+/* Define a container for the text and image */
+.container {
+    display: flex;
+    position: relative;
+    overflow-y: hidden;
+}
+.left {
+    overflow-y: auto;
+    flex-direction: column;
+    width: 50%;
+    height: 100%;
+}
+.query {
+    position: relative;
+    width: 100%;
+    overflow: auto;
+    height: auto;
+    max-height: 60vh;
+    background-color:#3C536D;
+}
+.query.day-mode{
+    background-color:#FFFDDD;
+}
+.query.move-up {
+    animation: move-up 0.5s forwards;
+}
+@keyframes move-up {
+    from {max-height: 60vh;}
+    to {max-height: 0;}
+}
+.query.move-down {
+    animation: move-down 0.5s forwards;
+}
+@keyframes move-down {
+    from {max-height: 0;}
+    to {max-height: 60vh;}
+}
+
+.toggle-button {
+    position: absolute;
+    display: flex;
+    transform: translate(-50%, 0%);
+    left: 25%;
+    align-items: center;
+    margin: auto auto;
+    justify-content: center;
+    height: 0px;
+    width: 50px;
+    font-size: 16px;
+    color: lightgray;
+    border-top: 15px solid;
+    border-left: 20px solid transparent;
+    border-right: 20px solid transparent;
+    cursor: pointer;
+}
+.toggle-button span {
+    margin-top: -16px;
+}
+.toggle-button.collapsed span {
+    transform: rotate(0deg);
+}
+.toggle-button.expanded span {
+    transform: rotate(180deg);
+}
+
+.clusters {
+    /*position: relative;*/
+    width: 100%;
+    max-height: 40vh;
+    overflow-y: auto;
+    /*display: none;*/
+}
+.members {
+    /*position: fixed;*/
+    width: 100%;
+    overflow-y: auto;
+    height: auto;
+    /*display: none;*/
+}
+
+.image {
+    top: 0;
+    left: 50%;
+    width: 50%;
+    height: 100%;
+    position: fixed;
+    right:0;
+    /*overflow: auto;*/
+    overflow: auto;
+    image-rendering: pixelated;
+    transition: left 0.4s ease, width 0.4s ease;
+}
+
+.circle {
+    width: 20px;
+    height: 20px;
+    margin-top: -13px;
+    margin-left: -13px;      
+    border-radius: 50%;
+    border: 3px solid white;
+    background-color: transparent;
+    position: absolute;
+}
+
+.crossyellow{
+    position: absolute;
+    margin-top: -2px;
+    margin-left: -2px;      
+}    
+.crossyellow::before, .crossyellow::after {
+    content: "";
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    transform-origin: 2px 2px;
+    border-top: 4px solid yellow;
+    border-left: 4px solid yellow;
+}    
+.crossyellow::before {
+    transform: rotate(45deg);
+}    
+.crossyellow::after {
+    transform: rotate(225deg);
+}
+
+.crossorange{
+    position: absolute;
+    margin-top: -2px;
+    margin-left: -2px;      
+}    
+.crossorange::before, .crossorange::after {
+    content: "";
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    transform-origin: 2px 2px;
+    border-top: 4px solid orange;
+    border-left: 4px solid orange;
+}    
+.crossorange::before {
+    transform: rotate(45deg);
+}    
+.crossorange::after {
+    transform: rotate(225deg);
+}
+
+.crosspurple{
+    position: absolute;
+    margin-top: -2px;
+    margin-left: -2px;      
+}    
+.crosspurple::before, .crosspurple::after {
+    content: "";
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    transform-origin: 2px 2px;
+    border-top: 4px solid blueviolet;
+    border-left: 4px solid blueviolet;
+}    
+.crosspurple::before {
+    transform: rotate(45deg);
+}    
+.crosspurple::after {
+    transform: rotate(225deg);
+}
+
+.crossblue{
+    position: absolute;
+    margin-top: -2px;
+    margin-left: -2px;      
+}    
+.crossblue::before, .crossblue::after {
+    content: "";
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    transform-origin: 2px 2px;
+    border-top: 4px solid deepSkyBlue;
+    border-left: 4px solid deepSkyBlue;
+}    
+.crossblue::before {
+    transform: rotate(45deg);
+}    
+.crossblue::after {
+    transform: rotate(225deg);
+}      
+
+.zoom-buttons {
+    display: none;
+    position: absolute;
+    top: 10px;
+    right: 25px;
+    z-index: 10;
+}
+
+.imagesurvey-dropdown {
+    display: none;
+    position: absolute;
+    top: 40px;
+    right: 25px;
+    z-index: 10;
+}
+
+#loading-overlay-clusters {
+    top: 50%;
+    left: calc(25% - 29px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+    overflow: hidden;
+    position: fixed;
+}
+.loading-spinner-clusters {
+    border: 4px solid rgba(0, 0, 0, 0.1);
+    border-top: 4px solid #3498db;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    animation: "spin 1s linear infinite";
+}
+
+#loading-overlay-members {
+    top: 85%;
+    left: calc(25% - 29px - 7px);
+    width: 100%;
+    height: 100%;
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+    overflow: hidden;
+    position: fixed;
+}
+.loading-spinner-members {
+    border: 4px solid rgba(0, 0, 0, 0.1);
+    border-top: 4px solid #3498db;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    animation: none;
+}
+
+#loading-overlay-image {
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: none;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    z-index: 9999;
+    overflow: hidden;
+    position: fixed;
+}
+.loading-spinner-image {
+    border: 4px solid rgba(0, 0, 0, 0.1);
+    border-top: 4px solid #3498db;
+    border-radius: 50%;
+    width: 200px;
+    height: 200px;
+    animation: none;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+
+
+.image {
+    background-color: var(--bg-color);
+}
+
+
+body.collapsed-sidebar .image {
+    left: 0%;
+    width: 100%;
+}
+
+#coordinatesbox, #scalebar, #scalebarkpc {
+    transition: left 0.4s ease;
+}
+
+body.collapsed-sidebar #coordinatesbox,
+body.collapsed-sidebar #scalebar,
+body.collapsed-sidebar #scalebarkpc {
+  position: fixed;
+  left: 0px;
+}
+
+body.collapsed-sidebar .zoom-buttons {
+  position: fixed;
+  left: auto;
+}
+
+
+#toggle-sidebar {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 0px;
+    width: 50px;
+    font-size: 16px;
+    color: lightgray;
+    border-top: 15px solid;
+    border-left: 20px solid transparent;
+    border-right: 20px solid transparent;
+    cursor: pointer;
+    transform: rotate(90deg) translateY(53px);           /* rotate the whole triangle */
+    transform-origin: center;
+    left: 50%;                          /* stick to left edge of image */
+    top: 160px;
+    z-index: 20;
+    transition: left 0.4s ease;
+}
+
+.toggle-sidebar span {
+    margin-top: -16px;
+}
+
+body.collapsed-sidebar #toggle-sidebar {
+    left: 15px;
+    transform: rotate(270deg) translateY(-53px);
+}
+
+
+/* Aladin Lite / live tiled Euclid VIS sky-view mode */
+#allimages { position: relative; }
+#aladin-lite-div { display:none; position:relative; width:100%; height:100%; min-height:100vh; z-index:0; }
+#imagecontainer.aladin-mode { overflow:hidden; }
+#imagecontainer.aladin-mode #allimages { width:100%; height:100%; }
+#imagecontainer.aladin-mode #cutoutimage,
+#imagecontainer.aladin-mode #contouroverlay,
+#imagecontainer.aladin-mode #contourszoverlay,
+#imagecontainer.aladin-mode #contoursz3goverlay { display:none !important; }
+#imagecontainer.aladin-mode #aladin-lite-div { display:block; }
+#imagecontainer.aladin-mode #crosses,
+#imagecontainer.aladin-mode #circles { position:absolute; left:0; top:0; width:100%; height:100%; z-index:20; pointer-events:none; }
+#imagecontainer.aladin-mode .circle { pointer-events:auto; cursor:pointer; }
+#imagecontainer.aladin-mode .crossyellow,
+#imagecontainer.aladin-mode .crossorange,
+#imagecontainer.aladin-mode .crosspurple,
+#imagecontainer.aladin-mode .crossblue { pointer-events:none; }
+
+#catalog_wrap label {
+    display:block;
+    padding-left:18px;
+    text-indent:-18px;
+    white-space:normal;
+}
+#catalog_wrap input[type="radio"] {
+    margin-right:3px;
+}
+#catalog_wrap td {
+    break-inside:avoid;
+}

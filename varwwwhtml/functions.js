@@ -430,7 +430,7 @@ function initAladin(callback=null){
         
 
 
-        const maskHips = aladin.createImageSurvey(
+       /* const maskHips = aladin.createImageSurvey(
             'mask_detcl',
             'MASK: correctedall_south_april26.fits',
             'https://erass-cluster-inspector.com/euclid/hips/mask_detcl/',
@@ -439,10 +439,10 @@ function initAladin(callback=null){
             { imgFormat: 'png' }
         );
         window.maskLayer = aladin.setOverlayImageLayer( maskHips, 'MASK: correctedall_south_april26.fits');
-        window.maskVisible = false;
-        window.maskLayer.setOpacity(0.0);
+        window.maskVisible = false;z
+        window.maskLayer.setOpacity(0.0);*/
 
-        /*if (!window.xrayLayer) {
+        if (!window.xrayLayer) {
             const manualHiPS024010 = aladin.createImageSurvey(
                 'eRASS1_024_Rate_c010',
                 'eRASS1 0.2-2.3 keV',
@@ -451,15 +451,10 @@ function initAladin(callback=null){
                 7,
                 { imgFormat: 'png' }
             );
-            window.xrayLayer024010 = aladin.setOverlayImageLayer(manualHiPS024010, 'eRASS1_024_Rate_c010');
-            //window.xrayLayer = aladin.getOverlayImageLayer('eRASS1_024_Rate_c010');
+            window.xrayLayer = aladin.setOverlayImageLayer(manualHiPS024010, 'eRASS1_024_Rate_c010');
             const enabled = document.getElementById("contouroverlaycheckbox")?.checked;
-            if (window.xrayLayer.setAlpha) {
-                window.xrayLayer.setAlpha(enabled ? 0.3 : 0.0);
-            } else if (window.xrayLayer.setOpacity) {
-                window.xrayLayer.setOpacity(enabled ? 0.3 : 0.0);
-            }
-        }*/
+            window.xrayLayer.setOpacity(enabled ? 0.8 : 0.0);
+        }
 
         /*if (!window.xrayLayer) {
             const manualHiPS024010 = aladin.createImageSurvey(
@@ -476,7 +471,7 @@ function initAladin(callback=null){
             window.xrayLayer.setOpacity(enabled ? 0.8 : 0.0);
         }*/
         
-        if (!window.xrayLayer) {
+        /*if (!window.xrayLayer) {
             const manualHiPS024010 = aladin.createImageSurvey(
                 'eROSITA_s04_s05_024_Rate_c030',
                 'eROSITA_s04_s05_024_Rate_c030',
@@ -490,9 +485,9 @@ function initAladin(callback=null){
             window.xrayLayer = aladin.setOverlayImageLayer(manualHiPS024010, 'eROSITA_s04_s05_024_Rate_c030');
             const enabled = document.getElementById("contouroverlaycheckbox")?.checked;
             window.xrayLayer.setOpacity(enabled ? 0.8 : 0.0);
-        }
+        }*/
 
-        if (!window.szLayer) {
+        /*if (!window.szLayer) {
             const szHips = aladin.createImageSurvey(
                 'spt_y',
                 'SPT 2021 Y',
@@ -506,15 +501,16 @@ function initAladin(callback=null){
             // initial state from your existing checkbox
             const enabled = document.getElementById("contourszoverlaycheckbox")?.checked;
             window.szLayer.setOpacity(enabled ? 0.6 : 0.0);
-        }
+        }*/
 
         //addSpecZCatalog({name: "RR2_extspec_cat_v1.0.fits", url: "https://erass-cluster-inspector.com/euclid/catalogs_aux/RR2_extspec_cat_v1.0.csv", color: "cyan"});
-        addSpecZCatalog({name: "deep mode", url: "https://erass-cluster-inspector.com/euclid/catalogs_aux/deep_mode_noduplicates_catalogue.csv", color: "magenta"});
+        /*addSpecZCatalog({name: "deep mode", url: "https://erass-cluster-inspector.com/euclid/catalogs_aux/deep_mode_noduplicates_catalogue.csv", color: "magenta"});
         addSpecZCatalog({name: "wide mode", url: "https://erass-cluster-inspector.com/euclid/catalogs_aux/wide_mode_noduplicates_catalogue.csv", color: "orange"});
         addSpecZCatalog({name: "deep survey", url: "https://erass-cluster-inspector.com/euclid/catalogs_aux/deep_survey_noduplicates_catalogue.csv", color: "magenta"});
         addSpecZCatalog({name: "wide survey", url: "https://erass-cluster-inspector.com/euclid/catalogs_aux/wide_survey_noduplicates_catalogue.csv", color: "orange"});
         //addSpecZCatalog({name: "eRASS:5", url: "https://erass-cluster-inspector.com/euclid/catalogs_aux/spec_z_compilation_matthias_2025_07_12.csv", color: "green"});
-        
+        */
+
         /*if (!window.xrayLayer) {
             const manualHiPS024030 = aladin.createImageSurvey(
                 'eROSITA_s04_024_Image_c030',

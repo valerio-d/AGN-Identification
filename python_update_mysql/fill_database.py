@@ -13,7 +13,7 @@ from tqdm import tqdm,trange
 from astropy.coordinates import SkyCoord
 
 try:
-    username,password = np.loadtxt('python_update_mysql\mysql_credentials.txt', usecols=1, dtype=str)
+    username,password = np.loadtxt('/Users/valerio/Work/developer/AGN-Identification/python_update_mysql/mysql_credentials.txt', usecols=1, dtype=str)
 except:
     print('Please update the file mysql_credentials.txt with your mysql username and password.')
     exit()

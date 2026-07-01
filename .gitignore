@@ -1,11 +1,16 @@
-.venv/
+# Security
+*credentials.txt
+*~
+
+# Python
 __pycache__/
 *.pyc
 
-*.fit
+# Heavy Data Files
 *.fits
+*.fit
+*.gz
 
-.vscode/
-.idea/
-
-*.txt
+# macOS system files
+.DS_Store
+**/.DS_Store

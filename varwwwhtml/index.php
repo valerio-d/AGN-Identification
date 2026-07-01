@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Euclid Cluster Inspector (private)</title>
+    <title>Active Galactic Nuclei Counterparts Inspector (private)</title>
 
     <link rel="icon" href="favicon.png" type="image/x-icon">
 

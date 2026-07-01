@@ -1,16 +1,23 @@
-# Security
+# Security: Protect sensitive database credentials and backups
+mysql_credentials.txt
 *credentials.txt
 *~
 
-# Python
+# Python: Ignore compiled bytecode
 __pycache__/
 *.pyc
 
-# Heavy Data Files
+# Data: Ignore heavy astronomical data files
 *.fits
 *.fit
 *.gz
+*.fits.gz
+*.colfits.gz
+
+# IDEs: Ignore local VS Code settings (optional, remove if you want to share settings)
+.vscode/
 
 # macOS system files
 .DS_Store
 **/.DS_Store
+EOF

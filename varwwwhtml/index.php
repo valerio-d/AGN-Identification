@@ -103,8 +103,8 @@
                 <!-- Left column: first 12 shortcuts -->
                 <td style="width:34%; vertical-align:top; padding-right:4px;">
                   <table style="width:100%;">
-                    <tr><td><strong>up</strong></td><td>Select cluster above</td></tr>
-                    <tr><td><strong>down</strong></td><td>Select cluster below</td></tr>
+                    <tr><td><strong>up</strong></td><td>Select x-ray counterpart above</td></tr>
+                    <tr><td><strong>down</strong></td><td>Select x-ray counterpart below</td></tr>
                     <tr><td><strong>m</strong></td><td>Show/hide members</td></tr>
                     <tr><td><strong>x/8</strong></td><td>Show/hide X-ray</td></tr>
                     <tr><td><strong>z/9</strong></td><td>
@@ -140,7 +140,7 @@
 
                 <td style="width:29%; vertical-align:top; padding-left:4px;">
                   <table style="width:100%; margin-top:-15px;">
-                    <tr><td><strong>u</strong></td><td>Copy link to selected cluster</td></tr>
+                    <tr><td><strong>u</strong></td><td>Copy link to selected x-ray counterpart</td></tr>
                     <tr><td><strong>s</strong></td><td>Open cursor object in SIMBAD</td></tr>
                     <tr><td><strong>v</strong></td><td>Load target in VIS at ESA Sky</td></tr>
                     <tr><td><strong>e</strong></td><td>Open eRASS1 X-ray image</td></tr>
@@ -165,16 +165,16 @@
 
 	    <table style="margin-left:auto;margin-right:auto;float:left;">
 	      <tr><td style="white-space: nowrap;"><div class="tooltip"><a href="https://simbad.cds.unistra.fr/simbad/sim-fbasic" target="simbadquery">SIMBAD</a> name:<span class="tooltiptext" style="top:125%;bottom:auto;left:80pt">query on SIMBAD</span></div></td><td colspan=2><input size="29" type="text" name="objname" value="<?php echo $objname;?>"></td></tr>
-	      <tr><td><div class="tooltip">Catalog name:<span class="tooltiptext" style="top:125%;bottom:auto;left:80pt">cluster name in catalog; separage list by commas</span></div></td><td colspan=2><input size="29" type="text" name="name" value="<?php echo $name;?>" maxlength=30000></td></tr>
+	      <tr><td><div class="tooltip">Catalog name:<span class="tooltiptext" style="top:125%;bottom:auto;left:80pt">X-ray counterpart name in catalog; separage list by commas</span></div></td><td colspan=2><input size="29" type="text" name="name" value="<?php echo $name;?>" maxlength=30000></td></tr>
 	      <tr><td><div class="tooltip">R.A.:<span class="tooltiptext" style="top:125%;bottom:auto;left:80pt">Right Ascension<br>hh:mm:ss<br>hh mm ss<br>dd.dddd</span></div></td><td><input size="8" type="text" name="sra" value=<?php echo $sra;?>></td></tr>
 	      <tr><td><div class="tooltip">Dec.:<span class="tooltiptext" style="top:125%;bottom:auto;left:80pt">Declination<br>dd:mm:ss<br>dd mm ss<br>dd.dddd</span></div></td><td><input size="8" type="text" name="sde" value=<?php echo $sde;?>></td></tr>
 	      <tr><td><div class="tooltip">max. distance:<span class="tooltiptext" style="top:125%;bottom:auto;left:80pt">maximum distance from search coordinates [arcmin]</span></div></td><td><input size="4" type="text" name="dist" value="<?php echo $dist;?>"> arcmin</td></tr>
-	      <tr><td style='text-align:right'><input size="8" type="text" name="bestzmin" value="<?php echo $bestzmin;?>"></td><td style='text-align:center'> < <div class="tooltip">BEST_Z<span class="tooltiptext" style="left:50pt;bottom:16pt">eRASS:5 photometric cluster redshift</span></div> &#8804 </td><td style='text-align:left'><input size="8" type="text" name="bestzmax" value="<?php echo $bestzmax;?>"></td></tr>
-          <!--<tr><td style='text-align:right'><input size="8" type="text" name="euczmin" value="<?php echo $euczmin;?>"></td><td style='text-align:center'> &#8804 <div class="tooltip">EUC_Z<span class="tooltiptext" style="left:50pt;bottom:16pt">Euclid photometric cluster redshift</span></div> &#8804 </td><td style='text-align:left'><input size="8" type="text" name="euczmax" value="<?php echo $euczmax;?>"></td></tr>-->
+	      <tr><td style='text-align:right'><input size="8" type="text" name="bestzmin" value="<?php echo $bestzmin;?>"></td><td style='text-align:center'> < <div class="tooltip">BEST_Z<span class="tooltiptext" style="left:50pt;bottom:16pt">eRASS:5 photometric x-ray counterpart redshift</span></div> &#8804 </td><td style='text-align:left'><input size="8" type="text" name="bestzmax" value="<?php echo $bestzmax;?>"></td></tr>
+          <!--<tr><td style='text-align:right'><input size="8" type="text" name="euczmin" value="<?php echo $euczmin;?>"></td><td style='text-align:center'> &#8804 <div class="tooltip">EUC_Z<span class="tooltiptext" style="left:50pt;bottom:16pt">Euclid photometric x-ray counterpart redshift</span></div> &#8804 </td><td style='text-align:left'><input size="8" type="text" name="euczmax" value="<?php echo $euczmax;?>"></td></tr>-->
           <tr><td style='text-align:right'><input size="8" type="text" name="extlikemin" value="<?php echo $extlikemin;?>"></td><td style='text-align:center'> < <div class="tooltip">RICHNESS<span class="tooltiptext" style="left:84pt;bottom:16pt">richness = scaled sum of membership probabilities</span></div> &#8804 </td><td style='text-align:left'><input size="8" type="text" name="extlikemax" value="<?php echo $extlikemax;?>"></td></tr>
           <!--<tr><td style='text-align:right'><input size="8" type="text" name="snrmin" value="<?php echo $snrmin;?>"></td><td style='text-align:center'> < <div class="tooltip">SNR<span class="tooltiptext" style="left:84pt;bottom:16pt">signal-to-noise ratio</span></div> &#8804 </td><td style='text-align:left'><input size="8" type="text" name="snrmax" value="<?php echo $snrmax;?>"></td></tr>-->
           <tr><td style='text-align:right'><input size="8" type="text" name="maskfracmin" value="<?php echo $maskfracmin;?>"></td><td style='text-align:center'> < <div class="tooltip">MASKFRAC<span class="tooltiptext" style="left:92pt;bottom:16pt">fraction of masked area</span></div> &#8804; </td><td style='text-align:left'><input size="8" type="text" name="maskfracmax" value="<?php echo $maskfracmax;?>"></td></tr>
-          <!--<tr><td style='text-align:right'><input size="8" type="text" name="pcontmin" disabled value="<?php echo $pcontmin;?>"></td><td style='text-align:center'> < <div class="tooltip">PCONT<span class="tooltiptext" style="left:92pt;bottom:16pt">probability of cluster being a contamination</span></div> &#8804; </td><td style='text-align:left'><input size="8" type="text" name="pcontmax" disabled value="<?php echo $pcontmax;?>"></td></tr> -->
+          <!--<tr><td style='text-align:right'><input size="8" type="text" name="pcontmin" disabled value="<?php echo $pcontmin;?>"></td><td style='text-align:center'> < <div class="tooltip">PCONT<span class="tooltiptext" style="left:92pt;bottom:16pt">probability of x-ray counterpart being a contamination</span></div> &#8804; </td><td style='text-align:left'><input size="8" type="text" name="pcontmax" disabled value="<?php echo $pcontmax;?>"></td></tr> -->
 
 	      <tr>
 
@@ -192,7 +192,7 @@
         <div class="tooltip">IN_ZVLIM<span class="tooltiptext" style="bottom:18pt;left:0pt">photo. redshift is smaller than limiting redshift (= where survey is sufficiently deep)</span></div>
         </label> -->
 
-		<td><label id="in-footprint-label">
+		<!--<td><label id="in-footprint-label">
         <input type="hidden" name="in_footprint" value="<?php echo $in_footprint === 0 ? '0' : ($in_footprint === 1 ? '1' : '2'); ?>">
         <span id="in-footprint-display">
             <?php
@@ -210,7 +210,7 @@
               ? ($merger === 0 ? '❌' : ($merger=== 1 ? '✅' : '❔')) 
               : '❔';
             ?>        </span>
-		  <div class="tooltip">MERGER<span class="tooltiptext" style="bottom:18pt;left:0pt;width:100pt">2 BCGs<br>&#8805;300kpc apart</span></div></label></td>
+		  <div class="tooltip">MERGER<span class="tooltiptext" style="bottom:18pt;left:0pt;width:100pt">2 BCGs<br>&#8805;300kpc apart</span></div></label></td>-->
 
         <!--
 		<td><label id="in-xgood-label">
@@ -229,7 +229,7 @@
         <?php echo $visual_contamination === 1 ? '❌' : ($visual_contamination === 2 ? '⚠️' : ($visual_contamination === 3 ? '✅' : '❔')); ?>
         </span>
 		  <!--<div class="tooltip">MATCH<span class="tooltiptext" style="bottom:35pt;left:0pt;width:130pt">red = only eRASS:5<br>yellow = only Euclid<br>green = match within 2'</span></div></label></td>-->
-          <div class="tooltip">CLU_QUALITY<span class="tooltiptext" style="bottom:35pt;left:0pt;width:185pt">visually classified as<br>contaminant, neutral, or good cluster</span></div></label></td>
+          <div class="tooltip">QUALITY<span class="tooltiptext" style="bottom:35pt;left:0pt;width:185pt">visually classified as<br>contaminant, neutral, or good x-ray counterpart</span></div></label></td>
         
 		<!-- <td><label id="split-cleaned-label">
         <input type="hidden" name="split_cleaned" value="<?php echo $split_cleaned === 0 ? '0' : ($split_cleaned === 1 ? '1' : '2'); ?>">
@@ -256,7 +256,7 @@
 
         <div id="catalog_wrap" style="display:inline-block;vertical-align:top;margin:0px 10px;width:440px;height:80px;column-count:1;column-gap:10px;column-fill:auto;overflow:hidden;">
             <table style="display:block;margin:0;width:100%;">
-    	        <tr><td><b>Cluster catalogs</b></td></tr>
+    	        <tr><td><b>x-ray counterpart catalogs</b></td></tr>
     	        <!--<tr><td><label><input type="radio" name="catalog" id="EUCPZWAVQ1"  value="EUCPZWAVQ1"  <?php if($catalog=="EUCPZWAVQ1" ) echo "checked";?>>PZWAV Q1</a></label></td></tr>
     	        <tr><td><label><input type="radio" name="catalog" id="EUCAMICOQ1"  value="EUCAMICOQ1"  <?php if($catalog=="EUCAMICOQ1" ) echo "checked";?>>AMICO Q1</a></label></td></tr>-->
     	        <!-- <tr><td><label><input type="radio" name="catalog" id="EUCPZWAV1"   value="EUCPZWAV1"   <?php if($catalog=="EUCPZWAV1"  ) echo "checked";?>>PZWAV RR2 v1</a></label></td></tr>
@@ -1026,26 +1026,26 @@ merger_input = document.getElementsByName('in_footprint')[0];
            echo "<label id='visual-contamination-markerlabel' style='display: block; text-align: center; cursor:pointer;'>
              <span id='visual-contamination-markericon'>" .
              ($results[0]['VISUAL_CONTAMINATION'] == 1 ? "❌" : ($results[0]['VISUAL_CONTAMINATION'] == 2 ? "✅" : "❔")) .
-             "</span> Cluster quality
+             "</span> X-ray Counterpart quality
              </label><br>";
            echo "<table id='memberstable' align='center' class='table-sortable'>";
            echo "<thead id='membersTableHead'>";
-           echo "<tr><th data-sort='float'>RA</th><th data-sort='float'>DEC</th><th data-sort='float'>PMEM</th><th data-sort='float'>";
-           if ($catalog == "EUCRR2AMICOHISNR"){
-               echo "r MAG (rest)";
-           }else if ($catalog == "EUCRR2PZWAV2"){
-               echo "H MAG";
-           }else if (str_contains($catalog, 'ERASS1')){
-               echo "z MAG";
-           }else if (str_contains($catalog, 'ERASS4')){
-               echo "z MAG";
-           }else{
-               echo "J MAG";
-           }
-           echo "</th><th data-sort='float'>ZSPEC</th><th data-sort='string'>ZSPEC_REF</th>";
-           if ($catalog == "ERASS4E"){
-               echo "<th data-sort='float'>BCG_SCORE</th>";
-           }
+           echo "<tr><th data-sort='float'>RA</th>";
+           echo "<th data-sort='float'>DEC</th>";
+           echo "<th data-sort='float'>g</th>";
+           echo "<th data-sort='float'>r</th>";
+           echo "<th data-sort='float'>z</th>";
+           echo "<th data-sort='float'>w1</th>";
+           echo "<th data-sort='float'>w2</th>";
+           echo "<th data-sort='float'>Xray_proba</th>";
+           echo "<th data-sort='float'>NWAY_bias_Xray_proba</th>";
+           echo "<th data-sort='float'>NWAY_Separation_ERO</th>";
+           echo "<th data-sort='float'>NWAY_p_single</th>";
+           echo "<th data-sort='float'>NWAY_p_any</th>";
+           echo "<th data-sort='float'>NWAY_p_i</th>";
+           echo "<th data-sort='float'>NWAY_match_flag</th>";
+           echo "<th data-sort='float'>SURVEY</th>";
+        
            echo "</tr>";
            echo "</thead>";
            echo "<tbody id='membersTableBody'>";
@@ -1151,7 +1151,7 @@ merger_input = document.getElementsByName('in_footprint')[0];
 	<a id="legacylink" style="display:none;" href="" target="legacyviewer">show in legacy viewer</a><br>
 	<a id="aladinlink" style="display:none;" href="" target="aladin">show in Aladin Lite</a><br>
 	<!--<a id="erodatlink" style="display:none;" href="" target="_blank">query eRASS1 X-ray catalog</a><br><br>-->
-    <a id="clusterurl" style="display:none;" href="#" onclick="event.preventDefault();generateClusterUrl();">copy url for this cluster</a><br><br>
+    <a id="clusterurl" style="display:none;" href="#" onclick="event.preventDefault();generateClusterUrl();">copy url for this AGN</a><br><br>
 	
 	
 	<div id="text"></div>

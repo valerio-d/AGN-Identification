@@ -291,24 +291,24 @@ body,html {
     position: absolute;
 }
 
-.crossyellow{
+.crossxray{
     position: absolute;
     margin-top: -2px;
     margin-left: -2px;      
 }    
-.crossyellow::before, .crossyellow::after {
+.crossxray::before, .crossxray::after {
     content: "";
     position: absolute;
     width: 20px;
     height: 20px;
     transform-origin: 2px 2px;
-    border-top: 4px solid yellow;
-    border-left: 4px solid yellow;
+    border-top: 4px solid #ca0020;
+    border-left: 4px solid #ca0020;
 }    
-.crossyellow::before {
+.crossxray::before {
     transform: rotate(45deg);
 }    
-.crossyellow::after {
+.crossxray::after {
     transform: rotate(225deg);
 }
 
@@ -531,7 +531,7 @@ body.collapsed-sidebar #toggle-sidebar {
 #imagecontainer.aladin-mode #crosses,
 #imagecontainer.aladin-mode #circles { position:absolute; left:0; top:0; width:100%; height:100%; z-index:20; pointer-events:none; }
 #imagecontainer.aladin-mode .circle { pointer-events:auto; cursor:pointer; }
-#imagecontainer.aladin-mode .crossyellow,
+#imagecontainer.aladin-mode .crossxray,
 #imagecontainer.aladin-mode .crossorange,
 #imagecontainer.aladin-mode .crosspurple,
 #imagecontainer.aladin-mode .crossblue { pointer-events:none; }

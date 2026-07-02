@@ -2,9 +2,7 @@
 
 - `gzip -d  Salvato_etal2025_DR1_LS10.colfits.gz` - unzip a .gz file
 <br>
-<br>
 - `stilts tpipe in=Salvato_etal2025_DR1_LS10.colfits out=Salvato_etal2025_DR1_LS10.fits` - chnage format from `.colfits` to `.fits`
-<br>
 <br>
 - `topcat Salvato_etal2025_DR1_LS10.fits` - open file with topcat
 <br>

@@ -250,7 +250,7 @@ function scrollMemberTableTo(im) {
 }
 
 // -------------------- Aladin Lite live sky viewer mode --------------------
-function getCurrentClusterFovDeg() {
+function getCurrentAGNFovDeg() {
     let z = null;
     if (results && results[ic]) z = results[ic]['BEST_Z'];
     z = parseFloat(z);
@@ -290,7 +290,7 @@ function initAladin(callback=null){
     const doInit = function(){
         var ra0 = results && results[ic] ? parseFloat(results[ic]['RA']) : parseFloat(sra);
         var dec0 = results && results[ic] ? parseFloat(results[ic]['DE']) : parseFloat(sde);
-        var fov0 = getCurrentClusterFovDeg();
+        var fov0 = getCurrentAGNFovDeg();
 
         //aladinSurvey = 'China-VO/P/BASS/DR3/image';  // Comment this out and also in index.php. I dont think is being used anymore. Or when specifying the survey in the url, leave it?
         //aladinSurvey = 'https://erass-cluster-inspector.com/euclid/hips/nisp_y/';
@@ -585,7 +585,7 @@ function updateAladinOverlays(){
     var crosses = document.getElementById("crosses");
     if (!circles || !crosses) return;
     circles.innerHTML = ""; crosses.innerHTML = "";
-    addCrossAladin(results[ic]['RA'],     results[ic]['DE'],      "crossyellow");
+    addCrossAladin(results[ic]['RA'],     results[ic]['DE'],      "crossxray");
     addCrossAladin(results[ic]['RA_OPT'], results[ic]['DEC_OPT'], "crossorange");
     addCrossAladin(results[ic]['RA_MBCG'], results[ic]['DEC_MBCG'], "crosspurple");
     addCrossAladin(sra, sde, "crossblue");
@@ -702,14 +702,14 @@ function aladinWheelZoomAtCursor(e) {
     aladinRedrawSoon();
 }
 
-function showCurrentClusterInAladin(){
+function showCurrentAGNInAladin(){
     if (!useAladin || aladin === null || !results || !results[ic]) return;
 
     var ra = parseFloat(results[ic]['RA']);
     var dec = parseFloat(results[ic]['DE']);
 
     aladin.gotoRaDec(ra, dec);
-    aladin.setFov(getCurrentClusterFovDeg());
+    aladin.setFov(getCurrentAGNFovDeg());
     aladin.view.setRotation(0);
 
     document.getElementById("coordinatesbox").style.display = "none";
@@ -753,7 +753,7 @@ function toggleAladinView(){
         cutout.style.display = "none";
 
         initAladin(() => {
-            showCurrentClusterInAladin();
+                showCurrentAGNInAladin();
             updateSurveyDropdownForAladin();
             docontouroverlay();
             docontourszoverlay();
@@ -1022,7 +1022,7 @@ function drawCircles(coordinates, zspec, raopt, decopt, rambcg, decmbcg, centerR
 
     // RA, DE X-ray center (ermldet?)
     let cross = document.createElement("div");
-    cross.classList.add("crossyellow");
+    cross.classList.add("crossxray");
     cross.style.left = imagesize/2*zoom + "px";
     cross.style.top  = imagesize/2*zoom + "px";
     crosses.appendChild(cross);
@@ -1130,7 +1130,6 @@ function drawCircles(coordinates, zspec, raopt, decopt, rambcg, decmbcg, centerR
             if (im >= 0) scrollMemberTableTo(im);
         });
 
-        color = 'red';
     	circle.style.border = "3px "+linetype+" "+color;
 	    circles.appendChild(circle);
 
@@ -1171,15 +1170,15 @@ function drawCircles3(coordinates, zspec, raopt, decopt, rambcg, decmbcg,
 
   // center X-ray
   const cross0 = document.createElement("div");
-  cross0.classList.add("crossyellow");
+    cross0.classList.add("crossxray");
   cross0.style.left = imagesizePx/2 + "px";
   cross0.style.top  = imagesizePx/2 + "px";
   crosses.appendChild(cross0);
 
   // optical, manual-BCG, and search crosses
-  addCross("crossorange", raopt, decopt);
-  addCross("crosspurple", rambcg, decmbcg);
-  addCross("crossblue", sra, sde);
+    addCross("crossorange", raopt, decopt);
+    addCross("crosspurple", rambcg, decmbcg);
+    addCross("crossblue", sra, sde);
 
   // circle‐drawing
   coordinates.forEach((coord, idx) => {
@@ -1268,7 +1267,7 @@ function drawCircles2(coordinates, zspec, raopt, decopt, rambcg, decmbcg, center
 
     // RA, DE X-ray center (ermldet?)
     let cross = document.createElement("div");
-    cross.classList.add("crossyellow");
+    cross.classList.add("crossxray");
     cross.style.left = imagesize/2*zoom + "px";
     cross.style.top  = imagesize/2*zoom + "px";
     crosses.appendChild(cross);
@@ -1549,7 +1548,7 @@ function changeImage(i,name,mid,ra,dec,raopt,decopt,rambcg,decmbcg,vcont,z,zoom,
     vcont = parseInt(vcont);
 
     if (newimage){
-        document.title = `${name} - Euclid Cluster Inspector (private)`;
+        document.title = `${name} - Active Galactic Nuclei Counterparts Inspector (private)`;
     }
 
     if (newimage & loadlocalimage & (imagesize != 1560)){
@@ -1584,7 +1583,7 @@ function changeImage(i,name,mid,ra,dec,raopt,decopt,rambcg,decmbcg,vcont,z,zoom,
         img2.style.display = "none";
         img3.style.display = "none";
         img4.style.display = "none";
-        initAladin(showCurrentClusterInAladin);
+        initAladin(showCurrentAGNInAladin);
     }
     imageerrormessage.style.width   = img.style.width;
     //imageerrormessage.style.height  = img.style.height;
@@ -1707,7 +1706,7 @@ function changeImage(i,name,mid,ra,dec,raopt,decopt,rambcg,decmbcg,vcont,z,zoom,
 	  image.scrollTo(csx, csy);
 	  scalescalebar(pxscale, image.clientWidth, scale);
       drawCircles(memcoords, memzspec, raopt, decopt, rambcg, decmbcg, ra, dec, imagesize/2, imagesize/2, pxscale, colors, zoom);
-      if (useAladin) showCurrentClusterInAladin();
+    if (useAladin) showCurrentAGNInAladin();
       if (z == null){
 	      document.getElementById("scalebarkpc").style.display = "none";
 	  }else{
@@ -1863,7 +1862,7 @@ function changeImage(i,name,mid,ra,dec,raopt,decopt,rambcg,decmbcg,vcont,z,zoom,
 				    //loadingOverlay.style.display   = "none";
 				    imageerrormessage.style.display = "none";
 				    drawCircles(memcoords, memzspec, raopt, decopt, rambcg, decmbcg, ra, dec, imagesize/2, imagesize/2, pxscale, colors, zoom);
-				    if (useAladin) showCurrentClusterInAladin();
+                    if (useAladin) showCurrentAGNInAladin();
 				  }
 			    }
 			  }
@@ -1941,7 +1940,7 @@ function changeImage(i,name,mid,ra,dec,raopt,decopt,rambcg,decmbcg,vcont,z,zoom,
 	    let crosses = document.getElementById("crosses");	      
 	    circles.innerHTML = "";
 	    crosses.innerHTML = "";
-	    $("#memberheader").text( "No data for CLUSTER " + name );      	          
+        $("#memberheader").text( "No data for AGN counterpart " + name );      	          
 	    $("#membersTableBody").empty();
 	    $("#membersTableHead").hide();
 	    $("#visual-contamination-markerlabel").hide();
@@ -2172,7 +2171,7 @@ function changeImage(i,name,mid,ra,dec,raopt,decopt,rambcg,decmbcg,vcont,z,zoom,
 	        nmem = rows.length - 1;
 		    $("#membersTableHead").show();
 		    $("#memberstable th").removeAttr("data-dir");
-	        $("#memberheader").text( nmem + " MEMBERS in CLUSTER " + name); 
+            $("#memberheader").text( nmem + " COUNTERPARTS for AGN " + name); 
 	        
             $("#visual-contamination-markerlabel").show();
             $("#visual-contamination-markericon").html(visualContaminationIcon(vcont));
@@ -2186,24 +2185,24 @@ function changeImage(i,name,mid,ra,dec,raopt,decopt,rambcg,decmbcg,vcont,z,zoom,
 
 
                 //assign colorblind-safe colors for each of the counterparts sources and their corresponding telescope
-	      	   if (columns[14] == '1'){//ls10
-	          		color = '#fdae61';
-	      	    }else if (columns[14] == '2'){ //cw2020
-                    color = '#abd9e9';
-                }else if(columns[14] == '3'){ //gdr3
-                    color = '#2c7bb6';
+                    const sourceColors = {
+                        '1': '#2c7bb6',
+                        '2': '#fdae61',
+                        '3': '#abd9e9'
+                    };
+                    color = sourceColors[columns[14]] || '#ca0020';
+                    colors.push(color);
+
+                
+                if (columns[14] == '1'){
+	      		    columns[14] = "LegacySurveyDR10";
+	      	    }else if(columns[14] == '2'){
+                    columns[14] = "CatWise2020";
                 }else{
-                    color = '#ca0020' //failsafe, eROSITA
-                    console.log(columns[14]);
+                    columns[14] = "Gaia_DR3"
                 }
 
-                colors.push(columns[14]);
-
-                /*if (columns[2] == "-1.00"){
-	      		    columns[2] = "—";
-	      	    }
-
-	      	    if (columns[5] == "0.00000"){
+	      	    /*if (columns[5] == "0.00000"){
 	      		    columns[5] = "—";
 	      		    memzspec.push(false);
 	      	    }else{
@@ -2250,7 +2249,7 @@ function changeImage(i,name,mid,ra,dec,raopt,decopt,rambcg,decmbcg,vcont,z,zoom,
     	    document.getElementById('aladinlink').href = aladinlink;
 	        //drawCircles(memcoords, memzspec, raopt, decopt, rambcg, decmbcg, ra, dec, imagesize/2, imagesize/2, pxscale, cg, 0, zoom);
 	        drawCircles(memcoords, memzspec, raopt, decopt, rambcg, decmbcg, ra, dec, imagesize/2, imagesize/2, pxscale, colors, zoom);
-            if (useAladin) showCurrentClusterInAladin();
+            if (useAladin) showCurrentAGNInAladin();
         }
             //var scalebar = document.getElementById("scalebar");
 	    //scalebar.style.width = 240/pxscale*scale+"px";
@@ -2490,17 +2489,15 @@ function updatetext(z,kpcas,mM) {
     if (z == null){
 	    newText += 'The redshift is unknown and assumed to be z=0.3.<br>';
     }else{
-	    // check if empty cluster is selected.
-	    newText += 'The redshift of the selected cluster is Z_CLUSTER=' + z + '.<br>';
+        newText += 'The redshift of the selected AGN counterpart is Z_AGN=' + z + '.<br>';
     };
     newText += 'At that redshift, the physical scale is ' + kpcas.toFixed(3) + ' kpc / arcsec<br>'
 	+ 'and the distance modulus is m-M=' + mM.toFixed(3) + ' mag.<br>'
 	+ 'These values have been calculated using the <a href="https://www.astro.ucla.edu/~wright/CosmoCalc.html" target="cosmocalc">cosmology calculator by Ned Wright</a> assuming a <a href="https://ui.adsabs.harvard.edu/abs/2020A%26A...641A...6P" target="planck">Planck+2018 cosmology</a>.<br><br>';
     if (z != null){
-	    newText += 'All circles denote cluster members.<br>'
+        newText += 'All circles denote AGN counterparts.<br>'
 	    + 'Dashed circles mark galaxies with a spectroscopic redshift ZSPEC.<br>'
-	    //+ 'The red circle marks the BCG.<br>'
-	    + 'The catalog center (RA, DEC) is marked by the yellow cross.<br>'
+        + 'The catalog center (RA, DEC) is marked by the x-ray cross.<br>'
 	    + 'The galaxy distribution barycenter (RA_OPT, DEC_OPT) is marked by the orange cross.<br>'
 	    + 'The manually chosen BCG is (RA_MBCG, DEC_MBCG) is marked by the purple cross.<br>'
 	    + 'The search coordinates from the form are marked by the blue cross.<br><br>';
@@ -2523,7 +2520,7 @@ function clampAladinFov(fovDeg) {
 function zoomOne(){
     if (useAladin && aladin !== null) {
         aladin.gotoRaDec(parseFloat(results[ic]['RA']), parseFloat(results[ic]['DE']));
-        aladin.setFov(getCurrentClusterFovDeg());
+        aladin.setFov(getCurrentAGNFovDeg());
         aladin.view.setRotation(0);
         aladinRedrawSoon();
         return;
@@ -2554,7 +2551,7 @@ function zoomFit(){
 }
 
 function zoomIn(factor=1.2, x=false, y=false){
-    if (useAladin && aladin !== null) { var fov = aladin.getFov ? aladin.getFov()[0] : getCurrentClusterFovDeg(); aladin.setFov(clampAladinFov(fov / factor)); aladinRedrawSoon(); return; }
+    if (useAladin && aladin !== null) { var fov = aladin.getFov ? aladin.getFov()[0] : getCurrentAGNFovDeg(); aladin.setFov(clampAladinFov(fov / factor)); aladinRedrawSoon(); return; }
     if (scale_before < 50){
 	scale *= factor;
 	changeImage(ic,results[ic]['NAME'],mids[ic],results[ic]['RA'],results[ic]['DE'],results[ic]['RA_OPT'],results[ic]['DEC_OPT'],results[ic]['RA_MBCG'],results[ic]['DEC_MBCG'],results[ic]['VISUAL_CONTAMINATION'],results[ic]['BEST_Z'], scale, scale_before, false, false, x, y);
@@ -2563,7 +2560,7 @@ function zoomIn(factor=1.2, x=false, y=false){
 }
 
 function zoomOut(factor=1.2, x=false, y=false){
-    if (useAladin && aladin !== null) { var fov = aladin.getFov ? aladin.getFov()[0] : getCurrentClusterFovDeg(); aladin.setFov(clampAladinFov(fov * factor)); aladinRedrawSoon(); return; }
+    if (useAladin && aladin !== null) { var fov = aladin.getFov ? aladin.getFov()[0] : getCurrentAGNFovDeg(); aladin.setFov(clampAladinFov(fov * factor)); aladinRedrawSoon(); return; }
     if (scale_before > 0.2){
 	scale /= factor;
 	changeImage(ic,results[ic]['NAME'],mids[ic],results[ic]['RA'],results[ic]['DE'],results[ic]['RA_OPT'],results[ic]['DEC_OPT'],results[ic]['RA_MBCG'],results[ic]['DEC_MBCG'],results[ic]['VISUAL_CONTAMINATION'],results[ic]['BEST_Z'], scale, scale_before, false, false, x, y);

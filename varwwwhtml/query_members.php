@@ -17,7 +17,8 @@
   if ($result){
     while ($row = mysqli_fetch_assoc($result))
     {
-      printf("%.5f %.5f %.2f %.2f %b %.5f %s %s <br>", $row['RA'], $row['DE'], $row['PMEM'], $row['REFMAG'], $row['CG'], $row['ZSPEC'], $row['ZSPEC_REF'], $row['BCG_SCORE']);
+      printf("%s %s %s %s %s %s %s %s %s %s %s %s %s %s %s <br>", $row['MEM_MATCH_ID'], $row['RA'], $row['DE'], $row['g'], $row['r'], $row['z'], $row['w1'], $row['w2'], $row['Xray_proba'], $row['NWAY_bias_Xray_proba'], $row['NWAY_Separation_ERO'], $row['NWAY_p_single'], $row['NWAY_p_any'], $row['NWAY_p_i'], $row['NWAY_match_flag']);
+      
     }
   } else {
     echo "Query error: " . mysqli_error($conn);

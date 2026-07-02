@@ -54,8 +54,8 @@ mydb = mysql.connector.connect(
 cursor = mydb.cursor(buffered=True)
 
 for cname in cnames:
-    newcluster = False
-    newmember  = True
+    newcluster = True
+    newmember  = False
     cleartable = True
     downloadimages = False
     update_catfile = False

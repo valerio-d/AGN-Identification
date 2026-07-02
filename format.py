@@ -14,9 +14,10 @@ gaia = Table.read(gaia_path)
 ls   = Table.read(ls_path)
 
 #assign unique colors for the online visualizer
-cw_color = '#F9C74F'
-gaia_color = '#4EA8DE'
-ls_color = '#43AA8B'
+eROSITA_color = '#ca0020' #symbol = X
+cw_color = '#fdae61' #symbol = traingle
+gaia_color = '#abd9e9' #symbol = square
+ls_color = '#2c7bb6' #symbol = circle
 
 
 # --- TEMPORARY INSPECT ---

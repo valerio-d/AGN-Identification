@@ -171,7 +171,7 @@
 	      <tr><td><div class="tooltip">max. distance:<span class="tooltiptext" style="top:125%;bottom:auto;left:80pt">maximum distance from search coordinates [arcmin]</span></div></td><td><input size="4" type="text" name="dist" value="<?php echo $dist;?>"> arcmin</td></tr>
 	      <tr><td style='text-align:right'><input size="8" type="text" name="bestzmin" value="<?php echo $bestzmin;?>"></td><td style='text-align:center'> < <div class="tooltip">BEST_Z<span class="tooltiptext" style="left:50pt;bottom:16pt">eRASS:5 photometric cluster redshift</span></div> &#8804 </td><td style='text-align:left'><input size="8" type="text" name="bestzmax" value="<?php echo $bestzmax;?>"></td></tr>
           <!--<tr><td style='text-align:right'><input size="8" type="text" name="euczmin" value="<?php echo $euczmin;?>"></td><td style='text-align:center'> &#8804 <div class="tooltip">EUC_Z<span class="tooltiptext" style="left:50pt;bottom:16pt">Euclid photometric cluster redshift</span></div> &#8804 </td><td style='text-align:left'><input size="8" type="text" name="euczmax" value="<?php echo $euczmax;?>"></td></tr>-->
-          <tr><td style='text-align:right'><input size="8" type="text" name="lambdanormmin" value="<?php echo $lambdanormmin;?>"></td><td style='text-align:center'> < <div class="tooltip">RICHNESS<span class="tooltiptext" style="left:84pt;bottom:16pt">richness = scaled sum of membership probabilities</span></div> &#8804 </td><td style='text-align:left'><input size="8" type="text" name="lambdanormmax" value="<?php echo $lambdanormmax;?>"></td></tr>
+          <tr><td style='text-align:right'><input size="8" type="text" name="extlikemin" value="<?php echo $extlikemin;?>"></td><td style='text-align:center'> < <div class="tooltip">RICHNESS<span class="tooltiptext" style="left:84pt;bottom:16pt">richness = scaled sum of membership probabilities</span></div> &#8804 </td><td style='text-align:left'><input size="8" type="text" name="extlikemax" value="<?php echo $extlikemax;?>"></td></tr>
           <!--<tr><td style='text-align:right'><input size="8" type="text" name="snrmin" value="<?php echo $snrmin;?>"></td><td style='text-align:center'> < <div class="tooltip">SNR<span class="tooltiptext" style="left:84pt;bottom:16pt">signal-to-noise ratio</span></div> &#8804 </td><td style='text-align:left'><input size="8" type="text" name="snrmax" value="<?php echo $snrmax;?>"></td></tr>-->
           <tr><td style='text-align:right'><input size="8" type="text" name="maskfracmin" value="<?php echo $maskfracmin;?>"></td><td style='text-align:center'> < <div class="tooltip">MASKFRAC<span class="tooltiptext" style="left:92pt;bottom:16pt">fraction of masked area</span></div> &#8804; </td><td style='text-align:left'><input size="8" type="text" name="maskfracmax" value="<?php echo $maskfracmax;?>"></td></tr>
           <!--<tr><td style='text-align:right'><input size="8" type="text" name="pcontmin" disabled value="<?php echo $pcontmin;?>"></td><td style='text-align:center'> < <div class="tooltip">PCONT<span class="tooltiptext" style="left:92pt;bottom:16pt">probability of cluster being a contamination</span></div> &#8804; </td><td style='text-align:left'><input size="8" type="text" name="pcontmax" disabled value="<?php echo $pcontmax;?>"></td></tr> -->
@@ -294,7 +294,7 @@
                 <tr><td><label class="tooltip"><input type="radio" name="catalog" id="EUCTR1FPZWAV" value="EUCTR1FPZWAV"    <?php if($catalog=="EUCTR1FPZWAV"   ) echo "checked";?>>PZWAV TR1f</a><span class="tooltiptext" style="bottom:36pt;left:-170pt;text-align:center;font-size:12px;width:420px">/sps/euclid/OU-LE3/CL/ial_workspace/workdir/DetIntile/TR1f/data/<br>unified_clusters_gluematch_seqrun_TR1f_south_mask26april_defaultSNRcuts_<br>20260520_1521462026-05-20T15:22:34.fits<br>DET_CODE_NB==2<br>Images available for z > 1.5</span></label></td></tr>-->
                 <!--<tr><td><label class="tooltip"><input type="radio" name="catalog" id="EUCTR1FAMICOCORNERS" value="EUCTR1FAMICOCORNERS"    <?php if($catalog=="EUCTR1FAMICOCORNERS") echo "checked";?>>AMICO TR1f (corners)</a><span class="tooltiptext" style="bottom:36pt;left:-60pt;text-align:center;font-size:12px;width:220px">E-mail by Stefano Andreon, 25 May 2026</span></label></td></tr>-->
                 <!--<tr><td><label><input type="radio" name="catalog" id="ERASS4E"  value="ERASS4E"  <?php if($catalog=="ERASS4E")  echo "checked";?>><a href="https://wiki.mpe.mpg.de/eRosita/eRASS5ClCat" target="_blank">eRASS:5 v1.1</a></label></td></tr>-->
-                <tr><td><label><input type="radio" name="catalog" id="ERASS1E"  value="ERASS1E"  <?php if($catalog=="ERASS1E")  echo "checked";?>>eRASS1</label></td></tr>
+                <tr><td><label><input type="radio" name="catalog" id="ERASS1A"  value="ERASS1A"  <?php if($catalog=="ERASS1A")  echo "checked";?>>eRASS1A</label></td></tr><!--~valerio this is were add the new eRASS1A selector in the web page -->
                             
 	        </table>
         </div>
@@ -701,11 +701,11 @@ merger_input = document.getElementsByName('in_footprint')[0];
 	   
                # query clusters
                if ($catalog == "OPTICAL"){
-                    $query = "SELECT MEM_MATCH_ID, NAME, BEST_Z, Z_LAMBDA, LIT_Z, LAMBDA_NORM, RA, DE, RA_MBCG, DEC_MBCG, MASKFRAC, VDISP, VDISP_ERR, IN_FOOTPRINT, IN_ZVLIM, LMAX, VISUAL_CONTAMINATION";
+                    $query = "SELECT MEM_MATCH_ID, NAME, BEST_Z, Z_LAMBDA, LIT_Z, EXT_LIKE, RA, DE, RA_MBCG, DEC_MBCG, MASKFRAC, VDISP, VDISP_ERR, IN_FOOTPRINT, IN_ZVLIM, LMAX, VISUAL_CONTAMINATION";
                //}else if (strpos($catalog, 'EUC') !== false){
-                //    $query = "SELECT MEM_MATCH_ID, NAME, BEST_Z, Z_LAMBDA, LIT_Z, LAMBDA_NORM, RA, DE, RA_MBCG, DEC_MBCG, MASKFRAC, IN_FOOTPRINT, IN_ZVLIM, LMAX, VISUAL_CONTAMINATION";
-               }else{
-                    $query = "SELECT MEM_MATCH_ID, NAME, BEST_Z, Z_LAMBDA, LIT_Z, LAMBDA_NORM, RA, DE, RA_OPT, DEC_OPT, RA_MBCG, DEC_MBCG, MASKFRAC, VDISP, VDISP_ERR, IN_FOOTPRINT, IN_ZVLIM, LMAX, VISUAL_CONTAMINATION";
+                //    $query = "SELECT MEM_MATCH_ID, NAME, BEST_Z, Z_LAMBDA, LIT_Z, EXT_LIKE, RA, DE, RA_MBCG, DEC_MBCG, MASKFRAC, IN_FOOTPRINT, IN_ZVLIM, LMAX, VISUAL_CONTAMINATION";
+                }else{
+                    $query = "SELECT MEM_MATCH_ID, NAME, RA, DE, BEST_Z, VISUAL_CONTAMINATION, EXT_LIKE, DET_LIKE, ML_FLUX";
                }
 
                if (in_array($catalog, ['EUCTR1BPZWAV','EUCTR1ERICHOUTAMICO','EUCTR1ERICHOUTPZWAV','EUCTR1ERICHOUTFPZWAV','EUCTR1FAMICOCORNERS'], true))
@@ -761,10 +761,10 @@ merger_input = document.getElementsByName('in_footprint')[0];
                }
 
                                                                                                                                                                                       
-               if ($lambdanormmin != "")                                                                                                                                              
-                   $query .= " LAMBDA_NORM > {$lambdanormmin} AND";                                                                                                                   
-               if ($lambdanormmax != "")                                                                                                                                              
-                   $query .= " LAMBDA_NORM <= {$lambdanormmax} AND";                                                                                                                  
+               if ($extlikemin != "")                                                                                                                                              
+                   $query .= " EXT_LIKE > {$extlikemin} AND";                                                                                                                   
+               if ($extlikemax != "")                                                                                                                                              
+                   $query .= " EXT_LIKE <= {$extlikemax} AND";                                                                                                                  
                                                                                                                                                                                       
                /*if ($snrmin != "")                                                                                                                                              
                    $query .= " SNR > {$snrmin} AND";                                                                                                                   
@@ -870,19 +870,20 @@ merger_input = document.getElementsByName('in_footprint')[0];
            }
            
            
+           
 	       $stmt = $conn->prepare($countQuery);
            $stmt->execute();
            $nclusters = $stmt->fetchColumn();
 	       
 	       if ($nclusters == 0){
 		       echo "<script>hideLoadingAnimation('clusters');</script>";
-		       exit("<h1 align='center'>No CLUSTERS found</h1>");
+		       exit("<h1 align='center'>No X-RAY DETECTION found</h1>");
            }
            
-           echo "<h1 align='center'>{$nclusters} CLUSTERS found</h1>";
+           echo "<h1 align='center'>{$nclusters} X-RAY DETECTIONS found</h1>";
 
 	       if ($nclusters >= 20000) {
-               echo "<h1 align='center'>Error: The query returned &ge;20000 clusters. Please refine your search.</h1>";
+               echo "<h1 align='center'>Error: The query returned &ge;20000 x-ray detections. Please refine your search.</h1>";
                echo "<script>hideLoadingAnimation('clusters');</script>";
                exit;
            }
@@ -933,100 +934,22 @@ merger_input = document.getElementsByName('in_footprint')[0];
                echo "<div style='display:inline-block;width:calc(100% - 50px)'><table align='center' style='font-size:13px' id='clusterstable' class='table-sortable'>";
                echo "<thead>";
                echo "<tr><th data-sort='string'><div class='tooltip'>";
-               if ($catalog == "EUCRR2AMICOHISNR"){
-                   echo "IAU NAME _ ID";
-               }else if ($catalog == "EUCSPT3G" | $catalog == "EUCWL1" | str_contains($catalog, 'ERASS1') | str_contains($catalog, 'ERASS4')){
-                   echo "NAME";
-               }else{
-                   echo "IAU NAME _ Z";
+               if ($catalog == "ERASS1A"){
+                   echo "DETUID";
                }
-               echo "<span class='tooltiptext' style='transform:translate(-10%,-18%)'>cluster name following IAU convention (truncated coordinates)</span></div></th><th data-sort='float'><div class='tooltip'>RA<span class='tooltiptext' style='transform: translate(-50%, -18%)'>Right Ascension</span></div></th><th data-sort='float'><div class='tooltip'>DEC<span class='tooltiptext' style='transform: translate(-50%, -18%)'>Declination</span></div></th>";
-               if ($catalog == "ERASS1E" | $catalog == "ERASS4EV1" | $catalog == "ERASS4EV2" | $catalog == "ERASS1P" | $catalog == "ERASS4P" | $catalog == "CODEX1" | $catalog == "LSDR9GRZ" | $catalog == "LSDR10GRZ" | $catalog == "OPTICAL"){
-                   echo "<th data-sort='float'><div class='tooltip'>LIT_Z<span class='tooltiptext' style='transform: translate(-50%, -18%)'>literature redshift</span></div></th>";
-               }else if (str_contains($catalog, 'ERASS4')) {
-                   echo "<th data-sort='float'><div class='tooltip'>EUC_Z<span class='tooltiptext' style='transform: translate(-50%, -18%)'>Euclid AMICO redshift</span></div></th>";
-               }else if ($catalog == 'EUCSPT3G'){
-                   echo "<th data-sort='float'><div class='tooltip'>Z_PZWAV<span class='tooltiptext' style='transform: translate(-50%, -18%)'>euclid redshift (Z_CLUSTER_1)</span></div></th>";
-               }else if (str_contains($catalog, 'ERASS1MATCHED')) {
-                   echo "<th data-sort='float'><div class='tooltip'>Z_EUCLID<span class='tooltiptext' style='transform: translate(-50%, -18%)'>euclid redshift</span></div></th>";
-               }else if (strpos($catalog, 'EUC') !== 0){
-                   echo "<th data-sort='float'><div class='tooltip'>ORG_Z<span class='tooltiptext' style='transform: translate(-50%, -18%)'>original redshift in catalog</span></div></th>";
-               }
+
+               echo "<span class='tooltiptext' style='transform:translate(-10%,-18%)'>cluster detection unique id</span></div></th><th data-sort='float'><div class='tooltip'>RA<span class='tooltiptext' style='transform: translate(-50%, -18%)'>Right Ascension</span></div></th><th data-sort='float'><div class='tooltip'>DEC<span class='tooltiptext' style='transform: translate(-50%, -18%)'>Declination</span></div></th>";
                
-               if (strpos($catalog, 'EUC') !== 0){
-                   echo "<th data-sort='float'><div class='tooltip'>BEST_Z<span class='tooltiptext' style='transform: translate(-50%, -18%)'>spectroscopic, photometric, or literature redshift</span></div></th>";
-               }
-               if ($catalog == 'EUCSPT3G'){
-                   echo "<th data-sort='float'><div class='tooltip'>Z_SPT<span class='tooltiptext' style='transform: translate(-50%, -18%)'>photometric redshift</span></div></th>";
-               }else if (str_contains($catalog, 'ERASS1')) {
-                   echo "<th data-sort='float'><div class='tooltip'>BEST_Z (eRASS1)<span class='tooltiptext' style='transform: translate(-50%, -18%)'>best redshift</span></div></th>";
-               }else if (str_contains($catalog, 'ERASS4')) {
-                   echo "<th data-sort='float'><div class='tooltip'>Z_PHOTO<span class='tooltiptext' style='transform: translate(-50%, -18%)'>photometric redshift Z_LAMBDA_CORR</span></div></th>";
-               }else{
-                   echo "<th data-sort='float'><div class='tooltip'>Z_CLUSTER<span class='tooltiptext' style='transform: translate(-50%, -18%)'>photometric redshift</span></div></th>";
-               }
-               // if ($catalog == "ERASS1E" | $catalog == "CUSTOM" | $catalog == "EFEDS2" | $catalog == "DESY1"){
-               if ($catalog == "ERASS1E" | $catalog == "DESY1" | $catalog == "ERASS4E" | $catalog == "ERASS4EV1" | $catalog == "ERASS4EV2"){
-                   echo "<th data-sort='float'><div class='tooltip'>Z_PHOTO_2<span class='tooltiptext' style='transform: translate(-90%, -18%)'>Z_LAMBDA_SECOND: redshift of second cluster along the line of sight</span></div></th>";
-               }
-               echo "<th data-sort='float'><div class='tooltip'>RICHNESS";
-               if (str_contains($catalog, 'ERASS1')) {
-                   echo " (eRASS1)";
-               }else if (in_array($catalog, ['EUCTR1ERICHOUT','EUCTR1FAMICOCORNERS'], true)) {
-                   echo "_ZP";
-               }else if (str_contains($catalog, 'PZWAV')) {
-                   echo "_PZWAV";
-               }else if (str_contains($catalog, 'AMICO')) {
-                   echo "_AMICO";
-               }
-               echo "<span class='tooltiptext' style='transform: translate(-50%, -18%)'>RICHNESS_CLUSTER: scaled sum of membership probabilities</span></div></th>";
-               if (in_array($catalog, ['EUCTR1BPZWAV','EUCTR1ERICHOUTAMICO','EUCTR1ERICHOUTPZWAV','EUCTR1ERICHOUTFPZWAV','EUCTR1FAMICOCORNERS'], true)) {
-    	           echo "<th data-sort='float'><div class='tooltip'>RICHNESS_RS<span class='tooltiptext' style='transform: translate(-50%, -18%)'>richness based on red-sequence galaxies</span></div></th>";
-               }
-	           
-               if (strpos($catalog, 'EUC') !== 0){
-	               echo "<th data-sort='float'><div class='tooltip'>FRAC_MASKED<span class='tooltiptext' style='transform: translate(-50%, -18%)'>FRAC_MASKED_CLUSTER: fraction of masked area</span></div></th>";
-               }
-	           if (str_contains($catalog, 'ERASS4')) {
-	               echo "<th data-sort='float'><div class='tooltip'>VDISP<span class='tooltiptext' style='transform: translate(-50%, -18%)'>velocity dispersion [km/s]</span></div></th><th data-sort='float'><div class='tooltip'>E_VDISP<span class='tooltiptext' style='transform: translate(-90%, -18%)'>VDISP_ERR: uncertainty of velocity dispersion [km/s]</span></div></th>";
-	           }
-
-	           if (str_contains($catalog, 'ERASS4')) {
-    	           echo "<th data-sort='float'><div class='tooltip'>LMAX<span class='tooltiptext' style='transform: translate(-90%, -18%)'>eROMaPPer cluster optical likelihood</span></div></th>";
-    	           echo "<th data-sort='float'><div class='tooltip'>SNR<span class='tooltiptext' style='transform: translate(-90%, -18%)'>AMICO cluster signal/noise</span></div></th>";
-	           }else{
-	               echo "<th data-sort='float'><div class='tooltip'>SNR<span class='tooltiptext' style='transform: translate(-90%, -18%)'>SNR_CLUSTER: signal to noise ratio of cluster detection</span></div></th>";
-	           }
-	           
-               //if ($catalog == "ERASS1E" | $catalog == "CUSTOM"){
-               if ($catalog == "ERASS1E"){
-                   echo "<th data-sort='float'><div class='tooltip'>PCONT<span class='tooltiptext' style='transform: translate(-90%, -18%)'>probability of cluster being a contamination</span></div></th>";
-               }
-               if ($catalog == "ERASS4E" | $catalog == "ERASS4P"){
-                   echo "<th data-sort='float'><div class='tooltip'>EXT_LIKE<span class='tooltiptext' style='transform: translate(-90%, -18%)'>Extent Likelihood</span></div></th>";
-                   echo "<th data-sort='float'><div class='tooltip'>DET_LIKE<span class='tooltiptext' style='transform: translate(-90%, -18%)'>Detection Likelihood (DET_LIKE_0)</span></div></th>";
-               }
-               if ($catalog == "ERASS1E" | $catalog == "ERASS4E" | $catalog == "ERASS4EV1" | $catalog == "ERASS4EV2"){
-                   echo "<th data-sort='float'><div class='tooltip'>L_X<span class='tooltiptext' style='transform: translate(-90%, -18%)'>log(X-ray luminosity 0.2-2.3keV inside 300 kpc [erg/s])</span></div></th>";
-    	           echo "<th data-sort='float'><div class='tooltip'>F_X<span class='tooltiptext' style='transform: translate(-90%, -18%)'>log(X-ray flux 0.2-2.3keV inside 300 kpc [erg/s/cm²])</span></div></th>";
-                   echo "<th data-sort='float'><div class='tooltip'>M_GAS<span class='tooltiptext' style='transform: translate(-90%, -18%)'>log(total gas mass inside 300 kpc [M<sub>&#x2609;</sub>])</span></div></th>";
-                   //echo "<th data-sort='float'><div class='tooltip'>L500<span class='tooltiptext' style='transform: translate(-90%, -18%)'>log(X-ray luminosity inside R500 [erg/s])</span></div></th>";
-                   //echo "<th data-sort='float'><div class='tooltip'>M500<span class='tooltiptext' style='transform: translate(-90%, -18%)'>log(total mass inside R500 [M<sub>&#x2609;</sub>])</span></div></th>";
-	               //echo "<th data-sort='float'><div class='tooltip'>R500<span class='tooltiptext' style='transform: translate(-90%, -18%)'>R500 [kpc]</span></div></th>";
-	           }
-	           if ($catalog == "ERASS4E"){
-                   echo "<th data-sort='float'><div class='tooltip'>BCG_SCORE<span class='tooltiptext' style='transform: translate(-90%, -18%)'>ML BCG likelihood</span></div></th>";
-               }
-               if ($catalog == "ERASS1PF"){
-	               echo "<th data-sort='float'><div class='tooltip'>CLASS<span class='tooltiptext' style='transform: translate(-90%, -18%)'>Cluster class</span></div></th>";
-	           }
-
+               echo "<th data-sort='float'><div class='tooltip'>BEST_Z<span class='tooltiptext' style='transform: translate(-50%, -18%)'>best redshift</span></div></th>";
+               echo "<th data-sort='float'><div class='tooltip'>EXT_LIKE<span class='tooltiptext' style='transform: translate(-90%, -18%)'>Extent Likelihood</span></div></th>";
+               echo "<th data-sort='float'><div class='tooltip'>DET_LIKE_0<span class='tooltiptext' style='transform: translate(-90%, -18%)'>Detection Likelihood (DET_LIKE_0)</span></div></th>";
                if ($sra != "" && $sde != "")
                    echo "<th data-sort='float'><div class='tooltip'>DISTANCE<span class='tooltiptext' style='transform: translate(-90%, -18%)'>from search position [arcmin]</span></div></th>";
+                echo "<th data-sort='float'><div class='tooltip'>ML_FLUX_1<span class='tooltiptext' style='transform: translate(-90%, -18%)'>X-ray Flux</span></div></th>";
 	       
 	           echo "</tr>";
                echo "</thead>";
-               echo "<tbody id='clustersTableBody'>";
+               echo "<tbody id='clustersTableBody'>"; #~Valerio IMPORTANT this is where the contents of the table start
                
                $i = 0;
                foreach ($results as $row) {
@@ -1044,146 +967,34 @@ merger_input = document.getElementsByName('in_footprint')[0];
                printf("<td style='text-align:center;width:100px'>%.5f</td>", $row['RA']);
                printf("<td style='text-align:center;width:100px'>%.5f</td>", $row['DE']);
 
-               if (($catalog == 'EUCSPT3G') | (strpos($catalog, 'EUC') !== 0) | (str_contains($catalog, 'ERASS1MATCHED')) ){
+                        
+                if (empty($row['BEST_Z'])){
+                printf("<td style='text-align:center;width:100px'>—</td>");
+                } else {
+                printf("<td style='text-align:center;width:100px'>%.5f</td>", $row['BEST_Z']);
+                }
+    
 	       
-	             if (empty($row['LIT_Z'])){
-	               printf("<td style='text-align:center;width:100px'>—</td>");
-                 } else if ($catalog === 'EUCSPT3G') {
-	               printf("<td style='text-align:center;width:100px'>%.3f</td>", $row['LIT_Z']);
-                 } else if ($catalog ===  'EUCPZWAVERASS1MATCHED') {
-	               printf("<td style='text-align:center;width:100px'>%.3f</td>", $row['LIT_Z']);
-                 } else if ($catalog ===  'EUCAMICOERASS1MATCHED') {
-	               printf("<td style='text-align:center;width:100px'>%.2f</td>", $row['LIT_Z']);
-                 } else if (str_contains($catalog, 'ERASS4')){
-	               printf("<td style='text-align:center;width:100px'>%.2f</td>", $row['LIT_Z']);
-	             } else {
-	               printf("<td style='text-align:center;width:100px'>%.5f</td>", $row['LIT_Z']);
-	             }			  
-               }
-               if (strpos($catalog, 'EUC') !== 0){
-	           
-                 if (empty($row['BEST_Z'])){
-                   printf("<td style='text-align:center;width:100px'>—</td>");
-	             } else {
-	               printf("<td style='text-align:center;width:100px'>%.5f</td>", $row['BEST_Z']);
-	             }
-               }
+                if (empty($row['EXT_LIKE'])){
+                    printf("<td style='text-align:center;width:130px'>—</td>");
+                }else{
+                    printf("<td style='text-align:center;width:130px'>%.1f</td>", $row['EXT_LIKE']);
+                }
 
-                   if (empty($row['Z_LAMBDA'])){
-                     printf("<td style='text-align:center;width:130px'>—</td>");
-                   } else if (strpos($catalog, 'EUCTR1ERICHOUT') === 0) {
-    	             printf("<td style='text-align:center;width:130px'>%.2f</td>", $row['Z_LAMBDA']);
-                   } else if (in_array($catalog, ['EUCTR1FAMICO','EUCTR1FAMICOCORNERS'], true)) {
-    	             printf("<td style='text-align:center;width:130px'>%.2f</td>", $row['Z_LAMBDA']);
-                   } else if (in_array($catalog, ['EUCRR2PZWAV2','EUCWL1','EUCTR1A','EUCTR1BPZWAV','EUCTR1CPZWAV','EUCTR1DPZWAV','EUCTR1EPZWAV','EUCTR1FPZWAV'], true)) {
-    	             printf("<td style='text-align:center;width:130px'>%.3f</td>", $row['Z_LAMBDA']);
-                   } else if (str_contains($catalog, 'ERASS1')){
-	                 printf("<td style='text-align:center;width:100px'>%.4f</td>", $row['BEST_Z']);
-                   } else if (str_contains($catalog, 'ERASS4')){
-	                 printf("<td style='text-align:center;width:100px'>%.5f</td>", $row['Z_LAMBDA']);
-                   } else if (str_contains($catalog, 'AMICO')) {
-    	             printf("<td style='text-align:center;width:130px'>%.3f</td>", $row['Z_LAMBDA']);
-                   //} else if (strpos($catalog, 'PZWAV') == 0) {
-    	           //  printf("<td style='text-align:center;width:130px'>%.3f</td>", $row['Z_LAMBDA']);
-                   //} else if (strpos($catalog, 'EUCRR2PZWAV2') == 0) {
-                   }else{
-    	             printf("<td style='text-align:center;width:130px'>%.2f</td>", $row['Z_LAMBDA']);
-                   }
-	       
-                   //if ($catalog == "ERASS1E" | $catalog == "CUSTOM" | $catalog == "EFEDS2" | $catalog == "DESY1"){
-                   if ($catalog == "ERASS1E" | $catalog == "DESY1" | $catalog == "ERASS4E" | $catalog == "ERASS4EV1" | $catalog == "ERASS4EV2"){
-	       	     if (empty($row['Z_LAMBDA_SECOND'])){
-                       printf("<td style='text-align:center;width:130px'>—</td>");
-                     }else{
-	       	   printf("<td style='text-align:center;width:130px'>%6.5f</td>", $row['Z_LAMBDA_SECOND']);
-                     }
-	           }
-	       
-                   if (empty($row['LAMBDA_NORM'])){
-                     printf("<td style='text-align:center;width:130px'>—</td>");
-                   }else{
-	       	         printf("<td style='text-align:center;width:130px'>%.1f</td>", $row['LAMBDA_NORM']);
-                   }
-                   
-                   if (in_array($catalog, ['EUCTR1BPZWAV','EUCTR1ERICHOUTAMICO','EUCTR1ERICHOUTPZWAV','EUCTR1ERICHOUTFPZWAV','EUCTR1FAMICOCORNERS'], true)) {
-                       if (empty($row['LAMBDA_RS'])){
-                         printf("<td style='text-align:center;width:130px'>—</td>");
-                       }else{
-	       	             printf("<td style='text-align:center;width:130px'>%.1f</td>", $row['LAMBDA_RS']);
-                       }
-                   }
+                if (empty($row['DET_LIKE'])){
+                    printf("<td style='text-align:center;width:130px'>—</td>");
+                }else{
+                    printf("<td style='text-align:center;width:130px'>%.1f</td>", $row['DET_LIKE']);
+                }
 
+                if (empty($row['ML_FLUX'])){
+                    printf("<td style='text-align:center;width:130px'>—</td>");
+                }else{
+                    printf("<td style='text-align:center;width:130px'>%.1f</td>", $row['ML_FLUX']);
+                }
                    
-                   if (strpos($catalog, 'EUC') !== 0){
-                     if (empty($row['VDISP'])){
-                       printf("<td style='text-align:center;width:130px'>—</td>");
-                       printf("<td style='text-align:center;width:130px'>—</td>");
-                       printf("<td style='text-align:center;width:130px'>—</td>");
-                     }else{
-                       printf("<td style='text-align:center;width:130px'>%.2f</td>", $row['MASKFRAC']);
-                       printf("<td style='text-align:center;width:130px'>%d</td>", $row['VDISP']);
-                       printf("<td style='text-align:center;width:130px'>%d</td>", $row['VDISP_ERR']);
-                     }
-                   }
-	       
-                   if ($catalog != "LSDR10GRZ" & $catalog != "LSDR9GRZ"){
-                     if (empty($row['LMAX'])){
-                       printf("<td style='text-align:center;width:100px'>—</td>");
-    	             }else{
-	                   printf("<td style='text-align:center;width:100px'>%.1f</td>", $row['LMAX']);
-	                 }
-                   }			  
-                   
-                    if ($catalog == "ERASS4E"){
-                     if (empty($row['SNR'])){
-                       printf("<td style='text-align:center;width:100px'>—</td>");
-    	             }else{
-	                   printf("<td style='text-align:center;width:100px'>%.1f</td>", $row['SNR']);
-	                 }
-                   }
-	       				
-                   //if ($catalog == "ERASS1E" | $catalog == "CUSTOM"){
-                   if ($catalog == "ERASS1E"){
-        	       	 if (empty($row['PCONT'])){
-                       printf("<td style='text-align:center;width:130px'>—</td>");
-                     }else{
-	               	   printf("<td style='text-align:center;width:130px'>%.2f</td>", $row['PCONT']);
-                     }
-                   }
-                   if ($catalog == "ERASS4E" | $catalog == "ERASS4P"){
-	       	        if (empty($row['DET_LIKE'])){
-                       printf("<td style='text-align:center;width:130px'>—</td>");
-                       printf("<td style='text-align:center;width:130px'>—</td>");
-                    }else{
-        	       	   printf("<td style='text-align:center;width:130px'>%.1f</td>", $row['EXT_LIKE']);
-	       	           printf("<td style='text-align:center;width:130px'>%.1f</td>", $row['DET_LIKE']);
-                    }
-                   }
-                   if ($catalog == "ERASS1E" | $catalog == "ERASS4E" | $catalog == "ERASS4EV1" | $catalog == "ERASS4EV2"){
-	       	        if (empty($row['L500'])){
-                       printf("<td style='text-align:center;width:130px'>—</td>");
-                       printf("<td style='text-align:center;width:130px'>—</td>");
-                       printf("<td style='text-align:center;width:130px'>—</td>");
-                    }else{
-        	       	   printf("<td style='text-align:center;width:130px'>%.2f</td>", $row['L500']);
-	               	   printf("<td style='text-align:center;width:130px'>%.2f</td>", $row['M500']);
-	       	           printf("<td style='text-align:center;width:130px'>%.2f</td>", $row['R500']);
-                    }
-	       
-	               }
-                   if ($catalog == "ERASS4E"){
-                       if (empty($row['BCG_SCORE'])){
-                         printf("<td style='text-align:center;width:130px'>—</td>");
-	                   }else{
-	                     printf("<td style='text-align:center;width:130px'>%.2f</td>", $row['BCG_SCORE']);
-	                   }
-                   }
-                   if ($catalog == "ERASS1PF"){
-	               	   printf("<td style='text-align:center;width:130px'>%.0f</td>", $row['CLASS']);
-                   }
-
 	       			      
-                   if ($sra != "" && $sde != "")
+                if ($sra != "" && $sde != "")
 	       	 printf("<td style='text-align:center;width:130px'>%.2f</td>", $row['DISTANCE']);
 	       			      
 	           echo "</tr>";
@@ -1204,7 +1015,7 @@ merger_input = document.getElementsByName('in_footprint')[0];
 	  mids = <?= json_encode($mids) ?>;
 	</script>
 	
-	<div class="members">
+	<div class="members"><!-- ~ Valerio - this is where the members begin -->
 
           <div id="loading-overlay-members"><div class="loading-spinner-members"></div></div>
 
@@ -1603,7 +1414,7 @@ merger_input = document.getElementsByName('in_footprint')[0];
 	
 	
     <!-- allow table sorting. Script from https://www.cssscript.com/demo/sort-table-header-column/ and slightly modified  -->
-    <script src="../tablesort.min.js"></script>
+    <script src="tablesort.min.js"></script>
     <script>document.querySelectorAll('.table-sortable').forEach(el => el.tsortable())</script>
 
     <!-- necessary when clicking the download image link  -->    

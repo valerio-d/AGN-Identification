@@ -1014,7 +1014,7 @@ function scalescalebarkpc(pxscale, imagewidth, scale) {
     scalebarkpc.style.width = scalebarkpcWidthPx;
 }
 
-function drawCircles(coordinates, zspec, raopt, decopt, rambcg, decmbcg, centerRA, centerDec, centerpx, centerpy, pxscale, bcg, zoom){
+function drawCircles(coordinates, zspec, raopt, decopt, rambcg, decmbcg, centerRA, centerDec, centerpx, centerpy, pxscale, colors, zoom){
     let circles = document.getElementById("circles");	      
     // Clean for new cluster
     crosses.innerHTML = "";
@@ -1071,7 +1071,7 @@ function drawCircles(coordinates, zspec, raopt, decopt, rambcg, decmbcg, centerR
         if (c == im_mark) {
 	        color = circlesHighlightColor;
     	}else{
-	        color = circlesInitialColor;
+	        color = colors[c];
 	    }		      
 
     
@@ -1130,6 +1130,7 @@ function drawCircles(coordinates, zspec, raopt, decopt, rambcg, decmbcg, centerR
             if (im >= 0) scrollMemberTableTo(im);
         });
 
+        color = 'red';
     	circle.style.border = "3px "+linetype+" "+color;
 	    circles.appendChild(circle);
 
@@ -1705,7 +1706,7 @@ function changeImage(i,name,mid,ra,dec,raopt,decopt,rambcg,decmbcg,vcont,z,zoom,
 	  }
 	  image.scrollTo(csx, csy);
 	  scalescalebar(pxscale, image.clientWidth, scale);
-      drawCircles(memcoords, memzspec, raopt, decopt, rambcg, decmbcg, ra, dec, imagesize/2, imagesize/2, pxscale, 0, zoom);
+      drawCircles(memcoords, memzspec, raopt, decopt, rambcg, decmbcg, ra, dec, imagesize/2, imagesize/2, pxscale, colors, zoom);
       if (useAladin) showCurrentClusterInAladin();
       if (z == null){
 	      document.getElementById("scalebarkpc").style.display = "none";
@@ -1734,6 +1735,7 @@ function changeImage(i,name,mid,ra,dec,raopt,decopt,rambcg,decmbcg,vcont,z,zoom,
     aladinlink = "https://aladin.cds.unistra.fr/AladinLite/?target=" + ra + "%20" + dec + "&fov=" + pxscale*imagesize/3600. + "&survey=CDS%2FP%2FEuclid%2FQ1%2FVIS";
     memcoords = [];
     memzspec  = [];
+    colors = [];
     //cg = -1;
     
     // cluster not in members list
@@ -1818,7 +1820,7 @@ function changeImage(i,name,mid,ra,dec,raopt,decopt,rambcg,decmbcg,vcont,z,zoom,
 			    //loadingSpinner.style.animation = "none";
 			    //loadingOverlay.style.display   = "none";
 			    imageerrormessage.style.display = "none";
-    	        drawCircles(memcoords, memzspec, raopt, decopt, rambcg, decmbcg, ra, dec, imagesize/2, imagesize/2, pxscale, cg, 0, zoom);
+    	        drawCircles(memcoords, memzspec, raopt, decopt, rambcg, decmbcg, ra, dec, imagesize/2, imagesize/2, pxscale, colors, zoom);
 		    }
 		//} else if (survey == "LS") {
 		} else {
@@ -1860,7 +1862,7 @@ function changeImage(i,name,mid,ra,dec,raopt,decopt,rambcg,decmbcg,vcont,z,zoom,
 				    //loadingSpinner.style.animation = "none";
 				    //loadingOverlay.style.display   = "none";
 				    imageerrormessage.style.display = "none";
-				    drawCircles(memcoords, memzspec, raopt, decopt, rambcg, decmbcg, ra, dec, imagesize/2, imagesize/2, pxscale, cg, 0, zoom);
+				    drawCircles(memcoords, memzspec, raopt, decopt, rambcg, decmbcg, ra, dec, imagesize/2, imagesize/2, pxscale, colors, zoom);
 				    if (useAladin) showCurrentClusterInAladin();
 				  }
 			    }
@@ -2158,22 +2160,13 @@ function changeImage(i,name,mid,ra,dec,raopt,decopt,rambcg,decmbcg,vcont,z,zoom,
 		    }
         });
 	    }
-
-        if (catalog === 'LSDR10GRZ') {
-            if (ra < 180) {
-                querymembersfile = "query_members_ls10e.php";
-            } else {
-                querymembersfile = "query_members_ls10w.php";
-            }
-        } else if (catalog === 'LSDR9GRZ') {
-            querymembersfile = "query_members_ls9.php";
-        } else {
-            querymembersfile = "query_members.php";
-        }
+        
+        querymembersfile = "query_members.php";
+        
         $.ajax({
 	    type: "POST",
 	    url: querymembersfile,
-	    data: { query: "SELECT RA, DE, PMEM, REFMAG, CG, ZSPEC, ZSPEC_REF, BCG_SCORE FROM " + catalog + "MEMBERS WHERE " + catalog + "MEMBERS.MEM_MATCH_ID = " + mid + " ORDER BY BCG_SCORE DESC, REFMAG ASC" },
+	    data: { query: "SELECT MEM_MATCH_ID, RA, DE, g, r, z, w1, w2, Xray_proba, NWAY_bias_Xray_proba, NWAY_Separation_ERO, NWAY_p_single, NWAY_p_any, NWAY_p_i, NWAY_match_flag, SURVEY FROM " + catalog + "MEMBERS WHERE " + catalog + "MEMBERS.MEM_MATCH_ID = " + mid + " ORDER BY NWAY_p_any ASC" },
 	    success: function(response) {
 	      	var rows = response.split("<br>");
 	        nmem = rows.length - 1;
@@ -2190,16 +2183,23 @@ function changeImage(i,name,mid,ra,dec,raopt,decopt,rambcg,decmbcg,vcont,z,zoom,
 	      	    var columns = rows[j].split(" ");
 	      	    legacylink = legacylink + columns[0] + "," + columns[1] + ";";
 	      	    memcoords.push([columns[0], columns[1]]);
-	      	    //if (j == 0){
-	          	//	color = 'color:red';
-	      	    //}else if (columns[4] == 1){
-    	      	//	cg = j;
-	          	//	color = 'color:orange';
-	      	    //}else{
-	      	    	color = '';
-	      	    //}
 
-	      	    if (columns[2] == "-1.00"){
+
+                //assign colorblind-safe colors for each of the counterparts sources and their corresponding telescope
+	      	   if (columns[14] == '1'){//ls10
+	          		color = '#fdae61';
+	      	    }else if (columns[14] == '2'){ //cw2020
+                    color = '#abd9e9';
+                }else if(columns[14] == '3'){ //gdr3
+                    color = '#2c7bb6';
+                }else{
+                    color = '#ca0020' //failsafe, eROSITA
+                    console.log(columns[14]);
+                }
+
+                colors.push(columns[14]);
+
+                /*if (columns[2] == "-1.00"){
 	      		    columns[2] = "—";
 	      	    }
 
@@ -2216,16 +2216,28 @@ function changeImage(i,name,mid,ra,dec,raopt,decopt,rambcg,decmbcg,vcont,z,zoom,
 	      	    if (columns[7] == ""){
 	      		    columns[7] = "—";
 	      	    }
-		    
+		        */
+
+                
 	      	    var tr = $("<tr id='m" + j + "' onclick='centerMember(" + j + "," + columns[0] + "," + columns[1] + "," + ra  + "," + dec + "," + imagesize/2 + "," + imagesize/2 + ")'>");
-	      	    var td1 = "<td style='text-align:center;width:100px;" + color + "'>" + columns[0] + "</td>";
-	      	    var td2 = "<td style='text-align:center;width:100px;" + color + "'>" + columns[1] + "</td>";
-	      	    var td3 = "<td style='text-align:center;width:100px;" + color + "'>" + columns[2] + "</td>";
-	      	    var td4 = "<td style='text-align:center;width:100px;" + color + "'>" + columns[3] + "</td>";
-	      	    var td5 = "<td style='text-align:center;width:100px;" + color + "'>" + columns[5] + "</td>";
-	      	    var td6 = "<td style='text-align:center;width:100px;" + color + "'>" + columns[6] + "</td>";
-	      	    var td7 = "<td style='text-align:center;width:100px;" + color + "'>" + columns[7] + "</td>";
-	      	    tr.append(td1, td2, td3, td4, td5, td6, td7);
+	      	    var td0 = "<td style='text-align:center;width:100px;color:" + color + "'>" + columns[0] + "</td>";
+	      	    var td1 = "<td style='text-align:center;width:100px;color:" + color + "'>" + columns[1] + "</td>";
+	      	    var td2 = "<td style='text-align:center;width:100px;color:" + color + "'>" + columns[2] + "</td>";
+	      	    var td3 = "<td style='text-align:center;width:100px;color:" + color + "'>" + columns[3] + "</td>";
+                var td4 = "<td style='text-align:center;width:100px;color:" + color + "'>" + columns[4] + "</td>";
+	      	    var td5 = "<td style='text-align:center;width:100px;color:" + color + "'>" + columns[5] + "</td>";
+	      	    var td6 = "<td style='text-align:center;width:100px;color:" + color + "'>" + columns[6] + "</td>";
+	      	    var td7 = "<td style='text-align:center;width:100px;color:" + color + "'>" + columns[7] + "</td>";
+                var td8 = "<td style='text-align:center;width:100px;color:" + color + "'>" + columns[8] + "</td>";
+                var td9 = "<td style='text-align:center;width:100px;color:" + color + "'>" + columns[9] + "</td>";
+                var td10 = "<td style='text-align:center;width:100px;color:" + color + "'>" + columns[10] + "</td>";
+                var td11 = "<td style='text-align:center;width:100px;color:" + color + "'>" + columns[11] + "</td>";
+                var td12 = "<td style='text-align:center;width:100px;color:" + color + "'>" + columns[12] + "</td>";
+                var td13 = "<td style='text-align:center;width:100px;color:" + color + "'>" + columns[13] + "</td>";
+                var td14 = "<td style='text-align:center;width:100px;color:" + color + "'>" + columns[14] + "</td>";
+                var td15 = "<td style='text-align:center;width:100px;color:" + color + "'>" + columns[15] + "</td>"; //~Valerio - one td for each of the columns in the mmebers table
+            
+	      	    tr.append(td0, td1, td2, td3, td4, td5, td6, td7, td8, td9, td10, td11, td12, td13, td14, td15);
 	      	    tr.append("</tr>");
 	      	    table.append(tr);
                 }
@@ -2237,7 +2249,7 @@ function changeImage(i,name,mid,ra,dec,raopt,decopt,rambcg,decmbcg,vcont,z,zoom,
     	    document.getElementById('esaskylink').href = esaskylink;
     	    document.getElementById('aladinlink').href = aladinlink;
 	        //drawCircles(memcoords, memzspec, raopt, decopt, rambcg, decmbcg, ra, dec, imagesize/2, imagesize/2, pxscale, cg, 0, zoom);
-	        drawCircles(memcoords, memzspec, raopt, decopt, rambcg, decmbcg, ra, dec, imagesize/2, imagesize/2, pxscale, 0, zoom);
+	        drawCircles(memcoords, memzspec, raopt, decopt, rambcg, decmbcg, ra, dec, imagesize/2, imagesize/2, pxscale, colors, zoom);
             if (useAladin) showCurrentClusterInAladin();
         }
             //var scalebar = document.getElementById("scalebar");

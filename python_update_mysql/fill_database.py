@@ -107,7 +107,7 @@ for cname in cnames: #~Valerio - IMPORTANT - this is useful when wanting to run 
         mem_gdr3 = mem_gdr3[~mem_gdr3['GDR3_RA'].mask]
         mem_gdr3.keep_columns(['MEM_MATCH_ID','GDR3_RA', 'GDR3_DEC', 'GDR3_Xray_proba', 'NWAY_bias_GDR3_Xray_proba', 'NWAY_GDR3_p_single', 'NWAY_GDR3_p_any', 'NWAY_GDR3_p_i', 'NWAY_GDR3_match_flag', 'GDR3_phot_g_mean_mag', 'GDR3_phot_bp_mean_mag', 'GDR3_phot_rp_mean_mag'])
         mem_gdr3.add_column(np.full(len(mem_gdr3), 3, np.uint8), name='SURVEY')
-        mem_gdr3.rename_columns(['GDR3_phot_g_mean_mag', 'GDR3_phot_bp_mean_mag', 'GDR3_phot_rp_mean_mag'], ['G', 'BP', 'RP'])
+        mem_gdr3.rename_columns(['GDR3_phot_g_mean_mag', 'GDR3_phot_bp_mean_mag', 'GDR3_phot_rp_mean_mag'], ['GG', 'BP', 'RP'])
         mem_gdr3.rename_columns(['GDR3_RA', 'GDR3_DEC', 'GDR3_Xray_proba', 'NWAY_bias_GDR3_Xray_proba', 'NWAY_GDR3_p_single', 'NWAY_GDR3_p_any', 'NWAY_GDR3_p_i', 'NWAY_GDR3_match_flag'], ['RA', 'DEC', 'Xray_proba', 'NWAY_bias_Xray_proba', 'NWAY_p_single', 'NWAY_p_any', 'NWAY_p_i', 'NWAY_match_flag'])
 
         mem = vstack([mem_ls10, mem_cw2020, mem_gdr3])
@@ -255,7 +255,10 @@ for cname in cnames: #~Valerio - IMPORTANT - this is useful when wanting to run 
             "NWAY_p_any DECIMAL(4,3),"
             "NWAY_p_i DECIMAL(4,3),"
             "NWAY_match_flag TINYINT(1),"
-            "SURVEY TINYINT(1)"
+            "SURVEY TINYINT(1),"
+            "GG DECIMAL(4,2),"
+            "BP DECIMAL(4,2),"
+            "RP DECIMAL(4,2)"
             ");")
         
         dtypes = {
@@ -267,6 +270,9 @@ for cname in cnames: #~Valerio - IMPORTANT - this is useful when wanting to run 
                 'z'           : 'DECIMAL(4,2)',
                 'w1'          : 'DECIMAL(4,2)',
                 'w2'          : 'DECIMAL(4,2)', 
+                'GG': 'DECIMAL(4,2)',
+                'BP': 'DECIMAL(4,2)',
+                'RP': 'DECIMAL(4,2)',
                 'Xray_proba'  : 'DECIMAL(4,3)', 
                 'NWAY_bias_Xray_proba': 'DECIMAL(10,5)',
                 'NWAY_Separation_ERO': 'DECIMAL(6,4)', 
@@ -277,8 +283,8 @@ for cname in cnames: #~Valerio - IMPORTANT - this is useful when wanting to run 
                 'SURVEY': 'TINYINT(1)'
             }
         
-        cols1 = 'MEM_MATCH_ID','RA','DE', 'g', 'r', 'z', 'w1', 'w2', 'Xray_proba', 'NWAY_bias_Xray_proba', 'NWAY_Separation_ERO', 'NWAY_p_single', 'NWAY_p_any', 'NWAY_p_i', 'NWAY_match_flag', 'SURVEY'
-        cols2 = 'MEM_MATCH_ID','RA','DEC', 'g', 'r', 'z', 'w1', 'w2', 'Xray_proba', 'NWAY_bias_Xray_proba', 'NWAY_Separation_ERO', 'NWAY_p_single', 'NWAY_p_any', 'NWAY_p_i', 'NWAY_match_flag', 'SURVEY'
+        cols1 = 'MEM_MATCH_ID','RA','DE', 'g', 'r', 'z', 'w1', 'w2', 'GG', 'BP', 'RP', 'Xray_proba', 'NWAY_bias_Xray_proba', 'NWAY_Separation_ERO', 'NWAY_p_single', 'NWAY_p_any', 'NWAY_p_i', 'NWAY_match_flag', 'SURVEY' 
+        cols2 = 'MEM_MATCH_ID','RA','DEC', 'g', 'r', 'z', 'w1', 'w2', 'GG', 'BP', "RP", 'Xray_proba', 'NWAY_bias_Xray_proba', 'NWAY_Separation_ERO', 'NWAY_p_single', 'NWAY_p_any', 'NWAY_p_i', 'NWAY_match_flag', 'SURVEY' 
 
         if (cname == 'ERASS4P') | (cname == 'OPTICAL') | (cname == 'ERASS5WAVELET'):
             dtypes['BCG_SCORE'] = 'DECIMAL(3,2)'

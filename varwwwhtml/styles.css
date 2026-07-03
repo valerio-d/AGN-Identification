@@ -1,6 +1,6 @@
 /* Night mode */
 :root {
-    --highlight-color:#5D6D7E;
+    --highlight-color:#2c7bb6;
 }
 /* Day mode */
 :root.day-mode {

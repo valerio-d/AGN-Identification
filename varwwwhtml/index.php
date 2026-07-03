@@ -171,7 +171,7 @@
 	      <tr><td><div class="tooltip">max. distance:<span class="tooltiptext" style="top:125%;bottom:auto;left:80pt">maximum distance from search coordinates [arcmin]</span></div></td><td><input size="4" type="text" name="dist" value="<?php echo $dist;?>"> arcmin</td></tr>
 	      <tr><td style='text-align:right'><input size="8" type="text" name="bestzmin" value="<?php echo $bestzmin;?>"></td><td style='text-align:center'> < <div class="tooltip">BEST_Z<span class="tooltiptext" style="left:50pt;bottom:16pt">eRASS:5 photometric x-ray counterpart redshift</span></div> &#8804 </td><td style='text-align:left'><input size="8" type="text" name="bestzmax" value="<?php echo $bestzmax;?>"></td></tr>
           <!--<tr><td style='text-align:right'><input size="8" type="text" name="euczmin" value="<?php echo $euczmin;?>"></td><td style='text-align:center'> &#8804 <div class="tooltip">EUC_Z<span class="tooltiptext" style="left:50pt;bottom:16pt">Euclid photometric x-ray counterpart redshift</span></div> &#8804 </td><td style='text-align:left'><input size="8" type="text" name="euczmax" value="<?php echo $euczmax;?>"></td></tr>-->
-          <tr><td style='text-align:right'><input size="8" type="text" name="extlikemin" value="<?php echo $extlikemin;?>"></td><td style='text-align:center'> < <div class="tooltip">RICHNESS<span class="tooltiptext" style="left:84pt;bottom:16pt">richness = scaled sum of membership probabilities</span></div> &#8804 </td><td style='text-align:left'><input size="8" type="text" name="extlikemax" value="<?php echo $extlikemax;?>"></td></tr>
+          <tr><td style='text-align:right'><input size="8" type="text" name="extlikemin" value="<?php echo $extlikemin;?>"></td><td style='text-align:center'> < <div class="tooltip">DET_LIKE_0<span class="tooltiptext" style="left:84pt;bottom:16pt">DET_LIKE = scaled sum of membership probabilities</span></div> &#8804 </td><td style='text-align:left'><input size="8" type="text" name="extlikemax" value="<?php echo $extlikemax;?>"></td></tr>
           <!--<tr><td style='text-align:right'><input size="8" type="text" name="snrmin" value="<?php echo $snrmin;?>"></td><td style='text-align:center'> < <div class="tooltip">SNR<span class="tooltiptext" style="left:84pt;bottom:16pt">signal-to-noise ratio</span></div> &#8804 </td><td style='text-align:left'><input size="8" type="text" name="snrmax" value="<?php echo $snrmax;?>"></td></tr>-->
           <tr><td style='text-align:right'><input size="8" type="text" name="maskfracmin" value="<?php echo $maskfracmin;?>"></td><td style='text-align:center'> < <div class="tooltip">MASKFRAC<span class="tooltiptext" style="left:92pt;bottom:16pt">fraction of masked area</span></div> &#8804; </td><td style='text-align:left'><input size="8" type="text" name="maskfracmax" value="<?php echo $maskfracmax;?>"></td></tr>
           <!--<tr><td style='text-align:right'><input size="8" type="text" name="pcontmin" disabled value="<?php echo $pcontmin;?>"></td><td style='text-align:center'> < <div class="tooltip">PCONT<span class="tooltiptext" style="left:92pt;bottom:16pt">probability of x-ray counterpart being a contamination</span></div> &#8804; </td><td style='text-align:left'><input size="8" type="text" name="pcontmax" disabled value="<?php echo $pcontmax;?>"></td></tr> -->
@@ -376,6 +376,7 @@
                 document.getElementsByName('submit')[0].focus()
             });*/
             merger_input = document.getElementsByName('merger')[0];
+            if (document.getElementById('merger-label'))
             document.getElementById('merger-label').addEventListener('click', function() {
                 var merger = parseInt(merger_input.value)
                 var display = document.getElementById('merger-display');
@@ -395,6 +396,7 @@
             });
 
             in_footprint_input = document.getElementsByName('in_footprint')[0];
+            if (document.getElementById('in-footprint-label'))
             document.getElementById('in-footprint-label').addEventListener('click', function() {
                 var in_footprint = parseInt(in_footprint_input.value)
                 var display = document.getElementById('in-footprint-display');
@@ -850,8 +852,8 @@ merger_input = document.getElementsByName('in_footprint')[0];
                 $query .= " VISUAL_CONTAMINATION = 3 AND";
             }
 
-           $query = rtrim($query, "WHERE");
-           $query = rtrim($query, "AND ");
+           $query = preg_replace('/ WHERE$/', '', $query);
+           $query = preg_replace('/ AND$/', '', $query);
 	       
            if ($sra != "" && $sde != "")
                $query .= " HAVING DISTANCE < {$dist} ORDER BY DISTANCE";
@@ -859,7 +861,7 @@ merger_input = document.getElementsByName('in_footprint')[0];
            if ($sra != "" && $sde != ""){
                preg_match("/FROM\s+(.+?)\s+HAVING/i", $query, $matches);
                
-               if (strpos($matches[1], "WHERE") == true){
+               if (strpos($matches[1], "WHERE") !== false){
                    $fillword = "AND";
                }else{
                    $fillword = "WHERE";

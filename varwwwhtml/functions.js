@@ -2188,9 +2188,9 @@ function changeImage(i,name,mid,ra,dec,raopt,decopt,rambcg,decmbcg,vcont,z,zoom,
 
                 //assign colorblind-safe colors for each of the counterparts sources and their corresponding telescope
                     const sourceColors = {
-                        '1': '#2c7bb6',
-                        '2': '#fdae61',
-                        '3': '#abd9e9'
+                        '1': '#abd9e9', //LS10
+                        '2': '#fdae61', //CW2020
+                        '3': '#ffffbf' //GDR3
                     };
                     color = sourceColors[columns[17]] || '#ca0020';
                     colors.push(color);

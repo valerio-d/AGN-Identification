@@ -54,7 +54,7 @@ mydb = mysql.connector.connect(
 cursor = mydb.cursor(buffered=True)
 
 for cname in cnames: #~Valerio - IMPORTANT - this is useful when wanting to run the code again for either recalculating the members or the clusters, both together or none.
-    newcluster = False
+    newcluster = True
     newmember  = True
     cleartable = True
     downloadimages = False
@@ -177,7 +177,7 @@ for cname in cnames: #~Valerio - IMPORTANT - this is useful when wanting to run 
             
         cursor.execute(execution_command)
             
-        dtypes = {''
+        dtypes = {
             'MEM_MATCH_ID'  : 'BIGINT SIGNED',
             'NAME'          : 'VARCHAR(50)',
             'RA'            : 'DECIMAL(8,5)',

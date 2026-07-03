@@ -6,7 +6,7 @@
     $sde = $_GET['sde'] ?? null;
     if(isset($_GET['dist'])){
       $dist = $_GET['dist'];
-    }elseif($objname || ($sra & $sde)){
+    }elseif($objname || ($sra && $sde)){
       $dist = 20.;
     }
     $name = $_GET['name'] ?? null;

@@ -17,8 +17,8 @@
     $extlikemax = $_GET['extlikemax'] ?? null;
     $extlikemin = $_GET['extlikemin'] ?? null;
     $extlikemax = $_GET['extlikemax'] ?? null;
-    $maskfracmin = $_GET['maskfracmin'] ?? null;
-    $maskfracmax = $_GET['maskfracmax'] ?? null;
+    $extlikemin = $_GET['extlikemin'] ?? null;
+    $extlikemax = $_GET['extlikemax'] ?? null;
     $pcontmin = $_GET['pcontmin'] ?? null;
     $pcontmax = $_GET['pcontmax'] ?? null;
     $catalog = $_GET['catalog'] ?? 'ERASS1A';
@@ -42,8 +42,8 @@
     $bestzmax = $_POST['bestzmax'];
     $extlikemin = $_POST['extlikemin'];
     $extlikemax = $_POST['extlikemax'];
-    $maskfracmin = $_POST['maskfracmin'];
-    $maskfracmax = $_POST['maskfracmax'];
+    $extlikemin = $_POST['extlikemin'];
+    $extlikemax = $_POST['extlikemax'];
     $name  = $_POST['name'];
     $catalog = $_POST['catalog'];
     $day_mode = $_POST['day_mode'];
@@ -223,8 +223,8 @@
      $bestzmax= "";
      $extlikemin = "";
      $extlikemax = "";
-     $maskfracmin = "";
-     $maskfracmax = "";
+     $extlikemin = "";
+     $extlikemax = "";
      $pcontmin = "";
      $pcontmax = "";
      $catalog = "ERASS1A";

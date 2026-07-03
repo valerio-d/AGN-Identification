@@ -137,6 +137,19 @@ for cname in cnames: #~Valerio - IMPORTANT - this is useful when wanting to run 
         mem['w1'][np.isinf(mem['w1'])] = np.nan
         mem['w2'][np.isinf(mem['w2'])] = np.nan
 
+        # === FIX: Remove duplicate counterparts from the same survey/catalog ===
+        # Create a structured array tracking unique matching coordinates and IDs to catch duplicates
+        dup_check = np.empty(len(mem), dtype=[('id', 'i8'), ('survey', 'i1'), ('ra', 'f8'), ('dec', 'f8'), ('flag', 'i1')])
+        dup_check['id'] = mem['MEM_MATCH_ID']
+        dup_check['survey'] = mem['SURVEY']
+        dup_check['ra'] = mem['RA']
+        dup_check['dec'] = mem['DEC']
+        dup_check['flag'] = mem['NWAY_match_flag']
+        
+        _, unique_idx = np.unique(dup_check, return_index=True)
+        mem = mem[np.sort(unique_idx)] # Preserves chronological table positioning 
+        # =======================================================================
+
         #if 'BCG_SCORE' not in mem.colnames:
         #    mem['BCG_SCORE'] = np.full(len(mem), np.nan, np.float32)
         

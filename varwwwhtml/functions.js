@@ -254,11 +254,14 @@ function getCurrentAGNFovDeg() {
     let z = null;
     if (results && results[ic]) z = results[ic]['BEST_Z'];
     z = parseFloat(z);
-    if (!Number.isFinite(z)) z = 0.3;   // same fallback idea as static mode
+    if (!Number.isFinite(z)) z = 0.3;   // fallback redshift
     const tmp = calculate_kpcas(z);
-    const kpcas_tmp = tmp[1];
-    // 2 Mpc across the image
-    const pxscale_tmp = 0.5 * 2 / imagesize / kpcas_tmp * 1000.;
+    const kpcas_tmp = tmp[1]; // kiloparsecs per arcsecond
+
+    // NEW AGN SCALE: 0.1 Mpc (100 kpc) across the image instead of 2 Mpc
+    const agn_diameter_mpc = 0.1; 
+    const pxscale_tmp = 0.5 * agn_diameter_mpc / imagesize / kpcas_tmp * 1000.;
+    
     return pxscale_tmp * imagesize / 3600.;
 }
 function getAladinArcsecPerPixel() {

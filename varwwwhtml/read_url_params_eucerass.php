@@ -7,7 +7,7 @@
     if(isset($_GET['dist'])){
       $dist = $_GET['dist'];
     }elseif($objname || ($sra && $sde)){
-      $dist = 20.;
+      $dist = 2.;
     }
     $name = $_GET['name'] ?? null;
     $name = rawurldecode($name);
@@ -228,7 +228,7 @@
      $pcontmin = "";
      $pcontmax = "";
      $catalog = "ERASS4E";
-  	 $dist = "20";
+  	 $dist = "2";
      //$sra = 3.5834583333333;
      //$sde = -30.388277777778;
      $sra = "";

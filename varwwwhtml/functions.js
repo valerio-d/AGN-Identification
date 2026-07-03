@@ -569,6 +569,24 @@ function aladinRedrawSoon(){
     if (!useAladin) return;
     window.requestAnimationFrame(function(){ updateAladinOverlays(); setTimeout(updateAladinOverlays,80); setTimeout(updateAladinOverlays,250); });
 }
+// Builds an inline SVG (circle/square/triangle) used to mark counterparts
+// so each source catalog (LS10/CW2020/GDR3) gets its own distinct shape,
+// in addition to its own color. `dashed` reproduces the existing
+// spec-z-available convention (dashed outline) using an SVG dash pattern.
+function buildMarkerSVG(shape, color, strokeWidth, dashed){
+    const dash = dashed ? ' stroke-dasharray="4,3"' : '';
+    if (shape === 'square'){
+        return '<svg viewBox="0 0 20 20" width="20" height="20" style="overflow:visible;display:block">'
+             + '<rect x="2" y="2" width="16" height="16" fill="none" stroke="' + color + '" stroke-width="' + strokeWidth + '"' + dash + '/></svg>';
+    } else if (shape === 'triangle'){
+        return '<svg viewBox="0 0 20 20" width="20" height="20" style="overflow:visible;display:block">'
+             + '<polygon points="10,1 19,18 1,18" fill="none" stroke="' + color + '" stroke-width="' + strokeWidth + '" stroke-linejoin="round"' + dash + '/></svg>';
+    }
+    // default / circle (GDR3)
+    return '<svg viewBox="0 0 20 20" width="20" height="20" style="overflow:visible;display:block">'
+         + '<circle cx="10" cy="10" r="8" fill="none" stroke="' + color + '" stroke-width="' + strokeWidth + '"' + dash + '/></svg>';
+}
+
 function addCrossAladin(ra, dec, cls){
     if (ra == null || dec == null || ra == 0 || dec == 0 || aladin === null) return;
     var p = aladin.world2pix(parseFloat(ra), parseFloat(dec));
@@ -596,10 +614,16 @@ function updateAladinOverlays(){
         var circle = document.createElement("div");
         circle.classList.add("circle");
         circle.style.left = p[0] + "px"; circle.style.top = p[1] + "px";
-        var color = circlesInitialColor;
-        if (c == im_mark) color = circlesHighlightColor; //; else if (c == 0) color = 'red';
-        var linetype = (memzspec && memzspec[c]) ? 'dashed' : 'solid';
-        circle.style.border = "3px " + linetype + " " + color;
+        circle.style.border = "none";
+        circle.style.background = "transparent";
+        circle.style.marginTop = "-10px";
+        circle.style.marginLeft = "-10px";
+        var highlighted = (c == im_mark);
+        var color = (colors && colors[c]) ? colors[c] : circlesInitialColor;
+        if (highlighted) color = circlesHighlightColor; //; else if (c == 0) color = 'red';
+        var shapeType = (shapes && shapes[c]) ? shapes[c] : 'circle';
+        var dashed = (memzspec && memzspec[c]) ? true : false;
+        circle.innerHTML = buildMarkerSVG(shapeType, color, highlighted ? 4 : 3, dashed);
         circle.addEventListener("click", function(e){
             e.stopPropagation();
             if (im_mark === c) {
@@ -1735,6 +1759,7 @@ function changeImage(i,name,mid,ra,dec,raopt,decopt,rambcg,decmbcg,vcont,z,zoom,
     memcoords = [];
     memzspec  = [];
     colors = [];
+    shapes = [];
     //cg = -1;
     
     // cluster not in members list
@@ -2192,8 +2217,15 @@ function changeImage(i,name,mid,ra,dec,raopt,decopt,rambcg,decmbcg,vcont,z,zoom,
                         '2': '#fdae61', //CW2020
                         '3': '#ffffbf' //GDR3
                     };
+                    //assign a distinct marker shape for each counterpart catalog (eROSITA itself stays a red cross)
+                    const sourceShapes = {
+                        '1': 'triangle', //LS10
+                        '2': 'square',   //CW2020
+                        '3': 'circle'    //GDR3
+                    };
                     color = sourceColors[columns[17]] || '#ca0020';
                     colors.push(color);
+                    shapes.push(sourceShapes[columns[17]] || 'circle');
 
                 
                 if (columns[17] == '1'){

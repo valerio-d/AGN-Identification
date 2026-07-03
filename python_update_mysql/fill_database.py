@@ -77,7 +77,21 @@ for cname in cnames: #~Valerio - IMPORTANT - this is useful when wanting to run 
 
 
     if 'MEM_MATCH_ID' not in cat.colnames:
-        cat['MEM_MATCH_ID'] = np.arange( 1, len(cat)+1, dtype=np.uint64)
+        # NOTE: this catalog can contain MULTIPLE rows for the same X-ray
+        # detection -- one row per NWAY counterpart candidate (see the
+        # NWAY_*_match_flag columns, where match_flag=2 marks an
+        # additional/secondary candidate from the same counterpart catalog).
+        # Assigning MEM_MATCH_ID with a plain arange() gives every row a
+        # UNIQUE id, which silently splits a single X-ray detection that has
+        # several candidate counterparts into multiple separate "clusters"
+        # in the CLUSTERS table -- each one only showing ONE of its
+        # counterparts (this is the bug behind duplicate DETUID rows in the
+        # inspector's detection table). Group by the source id column
+        # instead so every candidate row belonging to the same detection
+        # shares the same MEM_MATCH_ID.
+        idcol = cid.get(cname, 'DETUID')
+        _, mem_match_id = np.unique(cat[idcol], return_inverse=True)
+        cat['MEM_MATCH_ID'] = (mem_match_id + 1).astype(np.uint64)
 
 
     if 'VISUAL_CONTAMINATION' not in cat.colnames:
@@ -214,12 +228,20 @@ for cname in cnames: #~Valerio - IMPORTANT - this is useful when wanting to run 
             cat['M500'] = np.log10(cat['M500'] * 1e13)
 
             
-            
+        # `cat` may hold several rows for the same X-ray detection (one row
+        # per NWAY counterpart candidate, see the MEM_MATCH_ID assignment
+        # above). The CLUSTERS table should have exactly ONE row per
+        # detection, so keep only the first row for each MEM_MATCH_ID here.
+        # All of that detection's counterpart candidates are still kept in
+        # full in the MEMBERS table below (built from `mem`, not `cat`).
+        _, first_idx = np.unique(cat['MEM_MATCH_ID'], return_index=True)
+        cat_clusters = cat[np.sort(first_idx)]
+
         # populate table with clusters
-        for i in trange(len(cat), desc='clusters'):
+        for i in trange(len(cat_clusters), desc='clusters'):
             #if i%10000 == 0:
-            #    print('inserting cluster',i,'out of',len(cat))
-            data = ','.join([ "'"+str(cat[c][i])+"'" if 'VARCHAR' in dtypes[c] else str(cat[c][i]) for c in cols2 ])
+            #    print('inserting cluster',i,'out of',len(cat_clusters))
+            data = ','.join([ "'"+str(cat_clusters[c][i])+"'" if 'VARCHAR' in dtypes[c] else str(cat_clusters[c][i]) for c in cols2 ])
             data = data.replace('nan','NULL').replace('--','NULL')
             cursor.execute("insert into "+cname.upper()+"CLUSTERS ("+','.join(cols1)+") values ("+ data +");")
         

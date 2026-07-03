@@ -13,10 +13,8 @@
     $name = rawurldecode($name);
     $bestzmin = $_GET['bestzmin'] ?? null;
     $bestzmax = $_GET['bestzmax'] ?? null;
-    $extlikemin = $_GET['extlikemin'] ?? null;
-    $extlikemax = $_GET['extlikemax'] ?? null;
-    $extlikemin = $_GET['extlikemin'] ?? null;
-    $extlikemax = $_GET['extlikemax'] ?? null;
+    $detlikemin = $_GET['detlikemin'] ?? null;
+    $detlikemax = $_GET['detlikemax'] ?? null;
     $extlikemin = $_GET['extlikemin'] ?? null;
     $extlikemax = $_GET['extlikemax'] ?? null;
     $pcontmin = $_GET['pcontmin'] ?? null;
@@ -40,8 +38,8 @@
     $dist = $_POST['dist'];
     $bestzmin = $_POST['bestzmin'];
     $bestzmax = $_POST['bestzmax'];
-    $extlikemin = $_POST['extlikemin'];
-    $extlikemax = $_POST['extlikemax'];
+    $detlikemin = $_POST['detlikemin'];
+    $detlikemax = $_POST['detlikemax'];
     $extlikemin = $_POST['extlikemin'];
     $extlikemax = $_POST['extlikemax'];
     $name  = $_POST['name'];
@@ -52,6 +50,17 @@
     $xray = $_POST['xray'];
     $sz = $_POST['sz'];
 
+
+    if (empty($_POST['detlikemin'])) {
+       $detlikemin = false;}
+    else{
+        $detlikemin = $_POST['detlikemin'];
+    }
+    if (empty($_POST['detlikemax'])) {
+       $detlikemax = false;}
+    else{
+        $detlikemax = $_POST['detlikemax'];
+    }
 
     if (empty($_POST['extlikemin'])) {
        $extlikemin = false;}
@@ -221,8 +230,8 @@
      $name  = "";
      $bestzmin= "";
      $bestzmax= "";
-     $extlikemin = "";
-     $extlikemax = "";
+     $detlikemin = "";
+     $detlikemax = "";
      $extlikemin = "";
      $extlikemax = "";
      $pcontmin = "";

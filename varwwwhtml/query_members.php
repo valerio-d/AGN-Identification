@@ -17,7 +17,7 @@
   if ($result){
     while ($row = mysqli_fetch_assoc($result))
     {
-      printf("%s %s %s %s %s %s %s %s %s %s %s %s %s %s %s %s %s %s <br>", $row['RA'], $row['DE'], $row['g'], $row['r'], $row['z'], $row['w1'], $row['GG'] ?? '', $row['BP'] ?? '', $row['RP'] ?? '', $row['w2'], $row['Xray_proba'], $row['NWAY_bias_Xray_proba'], $row['NWAY_Separation_ERO'], $row['NWAY_p_single'], $row['NWAY_p_any'], $row['NWAY_p_i'], $row['NWAY_match_flag'], $row['SURVEY']);
+      printf("%s %s %s %s %s %s %s %s %s %s %s %s %s %s %s %s %s %s %s %s %s <br>", $row['RA'], $row['DE'], $row['g'], $row['r'], $row['z'], $row['w1'], $row['GG'] ?? '', $row['BP'] ?? '', $row['RP'] ?? '', $row['w2'], $row['Xray_proba'], $row['NWAY_bias_Xray_proba'], $row['NWAY_Separation_ERO'], $row['NWAY_p_single'], $row['NWAY_p_any'], $row['NWAY_p_i'], $row['NWAY_match_flag'], $row['NWAY_completeness6'], $row['NWAY_purity6'], $row['NWAY_threshold6'], $row['SURVEY']);
       
     }
   } else {

@@ -1049,6 +1049,9 @@ merger_input = document.getElementsByName('in_footprint')[0];
            echo "<th data-sort='float'>NWAY_p_any</th>";
            echo "<th data-sort='float'>NWAY_p_i</th>";
            echo "<th data-sort='float'>NWAY_match_flag</th>";
+           echo "<th data-sort='float'>NWAY_completeness6</th>";
+           echo "<th data-sort='float'>NWAY_purity6</th>";
+           echo "<th data-sort='float'>NWAY_threshold6</th>";
            echo "<th data-sort='float'>SURVEY</th>";
         
            echo "</tr>";

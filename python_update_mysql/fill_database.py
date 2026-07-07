@@ -28,7 +28,9 @@ cnames,cfiles = c1names + c2names, c1files + c2files
 cfiles  = dict(zip( cnames , cfiles ))
 cnames += ('ERASS1E','ERASS4E','Kluge','Hickson') #,'LSDR10grz','LSDR9grz') #,'erass1p','erass4p')
 cfiles['custom'] = '/home/mkluge/Documents/eRosita/projects/bluebcgs/literature_samples/cerulo2019/cerulo2019_WH15_parent_like_strict_aladin_with_id_z.csv'
-cfiles['ERASS1A']   = '/Users/valerio/Work/data/AGN_identification/FINAL_eRASS1_LS10_CW2020_GDR3_match.fits' #THIS IS WHERE THE LOCATION OF THE FILE IS
+
+cfiles['ERASS1A']   = '/Users/valerio/Work/data/AGN_identification/FINAL_eRASS1_LS10_CW2020_GDR3_match.fits' #~VALERIO - THIS IS WHERE THE LOCATION OF THE FILE IS
+cfiles['ERASS1A_NWAY_EXTRA'] = '/Users/valerio/Work/data/AGN_identification/eRASS1_threshold_purity_completeness_6_table.fits' #~VALERIO this is the new file containing the threshold, purity, and completeness columns
 
 
 orgzcol = {'ACO'      : 'Z_ABELL',
@@ -76,6 +78,18 @@ for cname in cnames: #~Valerio - IMPORTANT - this is useful when wanting to run 
         cat['ML_FLUX_1'] = np.log10(cat['ML_FLUX_1'])
 
 
+        ## ~ Valerio - reading the new file and joining using the DETUID
+        nway_extra_cat = Table.read(cfiles['ERASS1A_NWAY_EXTRA'])
+        nway_extra_cat.keep_columns([
+            'DETUID',
+            'NWAY_LS10_completeness6', 'NWAY_LS10_purity6', 'NWAY_LS10_threshold6',
+            'NWAY_CW2020_completeness6', 'NWAY_CW2020_purity6', 'NWAY_CW2020_threshold6',
+            'NWAY_GDR3_completeness6', 'NWAY_GDR3_purity6', 'NWAY_GDR3_threshold6'
+        ])
+        #~valerio MERGE using DETUID
+        cat = join(cat, nway_extra_cat, keys='DETUID', join_type='left')
+
+
     if 'MEM_MATCH_ID' not in cat.colnames:
         # NOTE: this catalog can contain MULTIPLE rows for the same X-ray
         # detection -- one row per NWAY counterpart candidate (see the
@@ -103,52 +117,69 @@ for cname in cnames: #~Valerio - IMPORTANT - this is useful when wanting to run 
 
             
     if newmember:#~VALERIO important filtering catalogs creation and renaming columns
-        mem_ls10 = deepcopy(cat)
-        mem_ls10 = mem_ls10[~mem_ls10['LS10_RA'].mask]
-        mem_ls10.keep_columns(['MEM_MATCH_ID', 'LS10_RA', 'LS10_DEC', 'LS10_Xray_proba', 'NWAY_Separation_LS10_ERO', 'NWAY_bias_LS10_Xray_proba', 'NWAY_LS10_p_single', 'NWAY_LS10_p_any', 'NWAY_LS10_p_i', 'NWAY_LS10_match_flag', 'dered_mag_g', 'dered_mag_r', 'dered_mag_z', 'dered_mag_W1', 'dered_mag_W2'])
-        mem_ls10.add_column(np.full(len(mem_ls10), 1, np.uint8), name='SURVEY')
-        mem_ls10.rename_columns(['dered_mag_g', 'dered_mag_r', 'dered_mag_z', 'dered_mag_W1', 'dered_mag_W2'], ['g', 'r', 'z', 'w1', 'w2'])
-        mem_ls10.rename_columns(['LS10_RA', 'LS10_DEC', 'LS10_Xray_proba', 'NWAY_Separation_LS10_ERO', 'NWAY_LS10_p_single', 'NWAY_LS10_p_any', 'NWAY_LS10_p_i', 'NWAY_LS10_match_flag'], ['RA', 'DEC', 'Xray_proba', 'NWAY_Separation_ERO', 'NWAY_p_single', 'NWAY_p_any', 'NWAY_p_i', 'NWAY_match_flag'])
+            # === LS10 SURVEY ===
+            mem_ls10 = deepcopy(cat)
+            mem_ls10 = mem_ls10[~mem_ls10['LS10_RA'].mask]
+            mem_ls10.keep_columns(['MEM_MATCH_ID', 'LS10_RA', 'LS10_DEC', 'LS10_Xray_proba', 'NWAY_Separation_LS10_ERO', 'NWAY_bias_LS10_Xray_proba', 'NWAY_LS10_p_single', 'NWAY_LS10_p_any', 'NWAY_LS10_p_i', 'NWAY_LS10_match_flag', 'dered_mag_g', 'dered_mag_r', 'dered_mag_z', 'dered_mag_W1', 'dered_mag_W2', 'NWAY_LS10_completeness6', 'NWAY_LS10_purity6', 'NWAY_LS10_threshold6'])
+            mem_ls10.add_column(np.full(len(mem_ls10), 1, np.uint8), name='SURVEY')
+            mem_ls10.rename_columns(['dered_mag_g', 'dered_mag_r', 'dered_mag_z', 'dered_mag_W1', 'dered_mag_W2'], ['g', 'r', 'z', 'w1', 'w2'])
+            
+            # FIX: Added the 3 source column names to the first list so it has 11 elements matching the second list
+            mem_ls10.rename_columns(
+                ['LS10_RA', 'LS10_DEC', 'LS10_Xray_proba', 'NWAY_Separation_LS10_ERO', 'NWAY_LS10_p_single', 'NWAY_LS10_p_any', 'NWAY_LS10_p_i', 'NWAY_LS10_match_flag', 'NWAY_LS10_completeness6', 'NWAY_LS10_purity6', 'NWAY_LS10_threshold6'], 
+                ['RA', 'DEC', 'Xray_proba', 'NWAY_Separation_ERO', 'NWAY_p_single', 'NWAY_p_any', 'NWAY_p_i', 'NWAY_match_flag', 'NWAY_completeness6', 'NWAY_purity6', 'NWAY_threshold6']
+            )
 
-        mem_cw2020 = deepcopy(cat)
-        mem_cw2020 = mem_cw2020[~mem_cw2020['CW2020_RA'].mask]
-        mem_cw2020.keep_columns(['MEM_MATCH_ID', 'CW2020_RA', 'CW2020_DEC', 'CW2020_Xray_proba', 'NWAY_CW2020_p_single', 'NWAY_CW2020_p_any', 'NWAY_CW2020_p_i', 'NWAY_CW2020_match_flag', 'CW2020_w1mag', 'CW2020_w2mag'])
-        mem_cw2020.add_column(np.full(len(mem_cw2020), 2, np.uint8), name='SURVEY')
-        mem_cw2020.rename_columns(['CW2020_w1mag', 'CW2020_w2mag'], ['w1', 'w2'])
-        mem_cw2020.rename_columns(['CW2020_RA', 'CW2020_DEC', 'CW2020_Xray_proba', 'NWAY_CW2020_p_single', 'NWAY_CW2020_p_any', 'NWAY_CW2020_p_i', 'NWAY_CW2020_match_flag'], ['RA', 'DEC', 'Xray_proba', 'NWAY_p_single', 'NWAY_p_any', 'NWAY_p_i', 'NWAY_match_flag'])
+            # === CW2020 SURVEY ===
+            mem_cw2020 = deepcopy(cat)
+            mem_cw2020 = mem_cw2020[~mem_cw2020['CW2020_RA'].mask]
+            mem_cw2020.keep_columns(['MEM_MATCH_ID', 'CW2020_RA', 'CW2020_DEC', 'CW2020_Xray_proba', 'NWAY_CW2020_p_single', 'NWAY_CW2020_p_any', 'NWAY_CW2020_p_i', 'NWAY_CW2020_match_flag', 'CW2020_w1mag', 'CW2020_w2mag', 'NWAY_CW2020_completeness6', 'NWAY_CW2020_purity6', 'NWAY_CW2020_threshold6'])
+            mem_cw2020.add_column(np.full(len(mem_cw2020), 2, np.uint8), name='SURVEY')
+            mem_cw2020.rename_columns(['CW2020_w1mag', 'CW2020_w2mag'], ['w1', 'w2'])
+            
+            # FIX: Added the 3 source column names to the first list here as well
+            mem_cw2020.rename_columns(
+                ['CW2020_RA', 'CW2020_DEC', 'CW2020_Xray_proba', 'NWAY_CW2020_p_single', 'NWAY_CW2020_p_any', 'NWAY_CW2020_p_i', 'NWAY_CW2020_match_flag', 'NWAY_CW2020_completeness6', 'NWAY_CW2020_purity6', 'NWAY_CW2020_threshold6'], 
+                ['RA', 'DEC', 'Xray_proba', 'NWAY_p_single', 'NWAY_p_any', 'NWAY_p_i', 'NWAY_match_flag', 'NWAY_completeness6', 'NWAY_purity6', 'NWAY_threshold6']
+            )
 
-        mem_gdr3 = deepcopy(cat)
-        mem_gdr3 = mem_gdr3[~mem_gdr3['GDR3_RA'].mask]
-        mem_gdr3.keep_columns(['MEM_MATCH_ID','GDR3_RA', 'GDR3_DEC', 'GDR3_Xray_proba', 'NWAY_bias_GDR3_Xray_proba', 'NWAY_GDR3_p_single', 'NWAY_GDR3_p_any', 'NWAY_GDR3_p_i', 'NWAY_GDR3_match_flag', 'GDR3_phot_g_mean_mag', 'GDR3_phot_bp_mean_mag', 'GDR3_phot_rp_mean_mag'])
-        mem_gdr3.add_column(np.full(len(mem_gdr3), 3, np.uint8), name='SURVEY')
-        mem_gdr3.rename_columns(['GDR3_phot_g_mean_mag', 'GDR3_phot_bp_mean_mag', 'GDR3_phot_rp_mean_mag'], ['GG', 'BP', 'RP'])
-        mem_gdr3.rename_columns(['GDR3_RA', 'GDR3_DEC', 'GDR3_Xray_proba', 'NWAY_bias_GDR3_Xray_proba', 'NWAY_GDR3_p_single', 'NWAY_GDR3_p_any', 'NWAY_GDR3_p_i', 'NWAY_GDR3_match_flag'], ['RA', 'DEC', 'Xray_proba', 'NWAY_bias_Xray_proba', 'NWAY_p_single', 'NWAY_p_any', 'NWAY_p_i', 'NWAY_match_flag'])
+            # === GDR3 SURVEY ===
+            mem_gdr3 = deepcopy(cat)
+            mem_gdr3 = mem_gdr3[~mem_gdr3['GDR3_RA'].mask]
+            # FIX: Fixed typo here from NWAY_GRD3_completeness6 to NWAY_GDR3_completeness6
+            mem_gdr3.keep_columns(['MEM_MATCH_ID','GDR3_RA', 'GDR3_DEC', 'GDR3_Xray_proba', 'NWAY_bias_GDR3_Xray_proba', 'NWAY_GDR3_p_single', 'NWAY_GDR3_p_any', 'NWAY_GDR3_p_i', 'NWAY_GDR3_match_flag', 'GDR3_phot_g_mean_mag', 'GDR3_phot_bp_mean_mag', 'GDR3_phot_rp_mean_mag', 'NWAY_GDR3_completeness6', 'NWAY_GDR3_purity6', 'NWAY_GDR3_threshold6'])
+            mem_gdr3.add_column(np.full(len(mem_gdr3), 3, np.uint8), name='SURVEY')
+            mem_gdr3.rename_columns(['GDR3_phot_g_mean_mag', 'GDR3_phot_bp_mean_mag', 'GDR3_phot_rp_mean_mag'], ['GG', 'BP', 'RP'])
+            
+            # FIX: Added the 3 source column names to the first list
+            mem_gdr3.rename_columns(
+                ['GDR3_RA', 'GDR3_DEC', 'GDR3_Xray_proba', 'NWAY_bias_GDR3_Xray_proba', 'NWAY_GDR3_p_single', 'NWAY_GDR3_p_any', 'NWAY_GDR3_p_i', 'NWAY_GDR3_match_flag', 'NWAY_GDR3_completeness6', 'NWAY_GDR3_purity6', 'NWAY_GDR3_threshold6'], 
+                ['RA', 'DEC', 'Xray_proba', 'NWAY_bias_Xray_proba', 'NWAY_p_single', 'NWAY_p_any', 'NWAY_p_i', 'NWAY_match_flag', 'NWAY_completeness6', 'NWAY_purity6', 'NWAY_threshold6']
+            )
 
-        mem = vstack([mem_ls10, mem_cw2020, mem_gdr3])
-        mem['NWAY_match_flag'][mem['NWAY_match_flag'] < 0] = 0
-        #mem['g'] = mem['g'].filled(np.nan)
-        #mem['r'] = mem['r'].filled(np.nan)
-        #mem['z'] = mem['z'].filled(np.nan)
-        #mem['w1'] = mem['w1'].filled(np.nan)
-        #mem['w2'] = mem['w2'].filled(np.nan)
-        mem['g'][np.isinf(mem['g'])] = np.nan
-        mem['r'][np.isinf(mem['r'])] = np.nan
-        mem['z'][np.isinf(mem['z'])] = np.nan
-        mem['w1'][np.isinf(mem['w1'])] = np.nan
-        mem['w2'][np.isinf(mem['w2'])] = np.nan
+            mem = vstack([mem_ls10, mem_cw2020, mem_gdr3])
+            mem['NWAY_match_flag'][mem['NWAY_match_flag'] < 0] = 0
+            mem['g'][np.isinf(mem['g'])] = np.nan
+            mem['r'][np.isinf(mem['r'])] = np.nan
+            mem['z'][np.isinf(mem['z'])] = np.nan
+            mem['w1'][np.isinf(mem['w1'])] = np.nan
+            mem['w2'][np.isinf(mem['w2'])] = np.nan
 
-        # === FIX: Remove duplicate counterparts from the same survey/catalog ===
-        # Create a structured array tracking unique matching coordinates and IDs to catch duplicates
-        dup_check = np.empty(len(mem), dtype=[('id', 'i8'), ('survey', 'i1'), ('ra', 'f8'), ('dec', 'f8'), ('flag', 'i1')])
-        dup_check['id'] = mem['MEM_MATCH_ID']
-        dup_check['survey'] = mem['SURVEY']
-        dup_check['ra'] = mem['RA']
-        dup_check['dec'] = mem['DEC']
-        dup_check['flag'] = mem['NWAY_match_flag']
-        
-        _, unique_idx = np.unique(dup_check, return_index=True)
-        mem = mem[np.sort(unique_idx)] # Preserves chronological table positioning 
-        # =======================================================================
+            # === FIX: turn negative placeholders to nan so they become sql 0s
+            for col in ['NWAY_completeness6', 'NWAY_purity6', 'NWAY_threshold6']:
+                mem[col][mem[col] < 0] = np.nan
+
+            # === FIX: Remove duplicate counterparts from the same survey/catalog ===
+            dup_check = np.empty(len(mem), dtype=[('id', 'i8'), ('survey', 'i1'), ('ra', 'f8'), ('dec', 'f8'), ('flag', 'i1')])
+            dup_check['id'] = mem['MEM_MATCH_ID']
+            dup_check['survey'] = mem['SURVEY']
+            dup_check['ra'] = mem['RA']
+            dup_check['dec'] = mem['DEC']
+            dup_check['flag'] = mem['NWAY_match_flag']
+            
+            _, unique_idx = np.unique(dup_check, return_index=True)
+            mem = mem[np.sort(unique_idx)] 
+            # =======================================================================
 
         #if 'BCG_SCORE' not in mem.colnames:
         #    mem['BCG_SCORE'] = np.full(len(mem), np.nan, np.float32)
@@ -290,6 +321,9 @@ for cname in cnames: #~Valerio - IMPORTANT - this is useful when wanting to run 
             "NWAY_p_any DECIMAL(4,3),"
             "NWAY_p_i DECIMAL(4,3),"
             "NWAY_match_flag TINYINT(1),"
+            "NWAY_completeness6 DECIMAL(10,5),"
+            "NWAY_purity6 DECIMAL(10,5),"
+            "NWAY_threshold6 DECIMAL(10,5),"
             "SURVEY TINYINT(1),"
             "GG DECIMAL(4,2),"
             "BP DECIMAL(4,2),"
@@ -315,11 +349,14 @@ for cname in cnames: #~Valerio - IMPORTANT - this is useful when wanting to run 
                 'NWAY_p_any': 'DECIMAL(4,3)', 
                 'NWAY_p_i': 'DECIMAL(4,3)',
                 'NWAY_match_flag': 'TINYINT(1)',
+                'NWAY_completeness6': 'DECIMAL(10,5)',
+                'NWAY_purity6': 'DECIMAL(10,5)',
+                'NWAY_threshold6': 'DECIMAL(10,5)',
                 'SURVEY': 'TINYINT(1)'
             }
         
-        cols1 = 'MEM_MATCH_ID','RA','DE', 'g', 'r', 'z', 'w1', 'w2', 'GG', 'BP', 'RP', 'Xray_proba', 'NWAY_bias_Xray_proba', 'NWAY_Separation_ERO', 'NWAY_p_single', 'NWAY_p_any', 'NWAY_p_i', 'NWAY_match_flag', 'SURVEY' 
-        cols2 = 'MEM_MATCH_ID','RA','DEC', 'g', 'r', 'z', 'w1', 'w2', 'GG', 'BP', "RP", 'Xray_proba', 'NWAY_bias_Xray_proba', 'NWAY_Separation_ERO', 'NWAY_p_single', 'NWAY_p_any', 'NWAY_p_i', 'NWAY_match_flag', 'SURVEY' 
+        cols1 = 'MEM_MATCH_ID','RA','DE', 'g', 'r', 'z', 'w1', 'w2', 'GG', 'BP', 'RP', 'Xray_proba', 'NWAY_bias_Xray_proba', 'NWAY_Separation_ERO', 'NWAY_p_single', 'NWAY_p_any', 'NWAY_p_i', 'NWAY_match_flag', 'NWAY_completeness6', 'NWAY_purity6', 'NWAY_threshold6', 'SURVEY' 
+        cols2 = 'MEM_MATCH_ID','RA','DEC', 'g', 'r', 'z', 'w1', 'w2', 'GG', 'BP', "RP", 'Xray_proba', 'NWAY_bias_Xray_proba', 'NWAY_Separation_ERO', 'NWAY_p_single', 'NWAY_p_any', 'NWAY_p_i', 'NWAY_match_flag', 'NWAY_completeness6', 'NWAY_purity6', 'NWAY_threshold6', 'SURVEY' 
 
         if (cname == 'ERASS4P') | (cname == 'OPTICAL') | (cname == 'ERASS5WAVELET'):
             dtypes['BCG_SCORE'] = 'DECIMAL(3,2)'

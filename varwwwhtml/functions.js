@@ -2194,8 +2194,8 @@ function changeImage(i,name,mid,ra,dec,raopt,decopt,rambcg,decmbcg,vcont,z,zoom,
 	    type: "POST",
 	    url: querymembersfile,
         data: { query: (catalog === "ERASS1A")
-            ? "SELECT MEM_MATCH_ID, RA, DE, g, r, z, w1, GG, BP, RP, w2, Xray_proba, NWAY_bias_Xray_proba, NWAY_Separation_ERO, NWAY_p_single, NWAY_p_any, NWAY_p_i, NWAY_match_flag, SURVEY FROM " + catalog + "MEMBERS WHERE " + catalog + "MEMBERS.MEM_MATCH_ID = " + mid + " ORDER BY NWAY_p_any ASC"
-            : "SELECT MEM_MATCH_ID, RA, DE, g, r, z, w1, w2, Xray_proba, NWAY_bias_Xray_proba, NWAY_Separation_ERO, NWAY_p_single, NWAY_p_any, NWAY_p_i, NWAY_match_flag, SURVEY FROM " + catalog + "MEMBERS WHERE " + catalog + "MEMBERS.MEM_MATCH_ID = " + mid + " ORDER BY NWAY_p_any ASC" },
+            ? "SELECT MEM_MATCH_ID, RA, DE, g, r, z, w1, GG, BP, RP, w2, Xray_proba, NWAY_bias_Xray_proba, NWAY_Separation_ERO, NWAY_p_single, NWAY_p_any, NWAY_p_i, NWAY_match_flag, NWAY_completeness6, NWAY_purity6, NWAY_threshold6, SURVEY FROM " + catalog + "MEMBERS WHERE " + catalog + "MEMBERS.MEM_MATCH_ID = " + mid + " ORDER BY NWAY_p_any ASC"
+            : "SELECT MEM_MATCH_ID, RA, DE, g, r, z, w1, w2,  Xray_proba, NWAY_bias_Xray_proba, NWAY_Separation_ERO, NWAY_p_single, NWAY_p_any, NWAY_p_i, NWAY_match_flag, NWAYi_completeness6, NWAY_purity6, NWAY_threshold6, SURVEY FROM " + catalog + "MEMBERS WHERE " + catalog + "MEMBERS.MEM_MATCH_ID = " + mid + " ORDER BY NWAY_p_any ASC" },
 	    success: function(response) {
 	      	var rows = response.split("<br>");
 	        nmem = rows.length - 1;
@@ -2226,17 +2226,17 @@ function changeImage(i,name,mid,ra,dec,raopt,decopt,rambcg,decmbcg,vcont,z,zoom,
                         '2': 'square',   //CW2020
                         '3': 'circle'    //GDR3
                     };
-                    color = sourceColors[columns[17]] || '#ca0020';
+                    color = sourceColors[columns[20]] || '#ca0020';
                     colors.push(color);
-                    shapes.push(sourceShapes[columns[17]] || 'circle');
+                    shapes.push(sourceShapes[columns[20]] || 'circle');
 
                 
-                if (columns[17] == '1'){
-	      		    columns[17] = "LegacySurveyDR10";
-	      	    }else if(columns[17] == '2'){
-                    columns[17] = "CatWise2020";
+                if (columns[20] == '1'){
+	      		    columns[20] = "LegacySurveyDR10";
+	      	    }else if(columns[20] == '2'){
+                    columns[20] = "CatWise2020";
                 }else{
-                    columns[17] = "Gaia_DR3"
+                    columns[20] = "Gaia_DR3"
                 }
 
 	      	    /*if (columns[5] == "0.00000"){
@@ -2275,8 +2275,11 @@ function changeImage(i,name,mid,ra,dec,raopt,decopt,rambcg,decmbcg,vcont,z,zoom,
                 var td16 = "<td style='text-align:center;width:100px;color:" + color + "'>" + columns[16] + "</td>"; //~Valerio - one td for each of the columns in the mmebers table
                 var td17 = "<td style='text-align:center;width:100px;color:" + color + "'>" + columns[17] + "</td>"; //~Valerio - one td for each of the columns in the mmebers table
                 var td18 = "<td style='text-align:center;width:100px;color:" + color + "'>" + columns[18] + "</td>"; //~Valerio - one td for each of the columns in the mmebers table
+                var td19 = "<td style='text-align:center;width:100px;color:" + color + "'>" + columns[19] + "</td>";
+                var td20 = "<td style='text-align:center;width:100px;color:" + color + "'>" + columns[20] + "</td>";
+              //  var td21 = "<td style='text-align:center;width:100px;color:" + color + "'>" + columns[21] + "</td>";
             
-	      	    tr.append(td0, td1, td2, td3, td4, td5, td6, td7, td8, td9, td10, td11, td12, td13, td14, td15, td16, td17, td18);
+	      	    tr.append(td0, td1, td2, td3, td4, td5, td6, td7, td8, td9, td10, td11, td12, td13, td14, td15, td16, td17, td18, td19, td20);
 	      	    tr.append("</tr>");
 	      	    table.append(tr);
                 }
